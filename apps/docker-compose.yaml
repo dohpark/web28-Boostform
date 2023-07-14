@@ -1,0 +1,71 @@
+version: "3.8"
+services:
+  server:
+    build: ./server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    depends_on:
+      - mongo
+      - redis
+      - mysql
+
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client/src:/app/src
+    env_file:
+      - ./.client.env
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - mongo_volume:/data/db
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./.env
+
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - redis_volume:/data
+    ports:
+      - "6379:6379"
+
+  scheduler:
+    build: ./redis
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+      - mongo
+
+  mysql:
+    image: mysql:5.7.26
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_volume:/var/lib/mysql
+    env_file:
+      - ./.env
+
+volumes:
+  mongo_volume:
+  mysql_volume:
+  redis_volume:

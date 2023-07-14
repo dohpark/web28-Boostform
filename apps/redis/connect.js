@@ -5,20 +5,15 @@ import * as redis from "redis";
 dotenv.config();
 
 // MongoDB 연결
-function connectDB() {
-  mongoose.connect(
-    `mongodb+srv://${process.env.MONGODB_ID}:${process.env.MONGODB_PASSWORD}@cluster0.a7vmgdw.mongodb.net/database0?`,
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("mongoDB is connected...");
-      }
+export function connectDB() {
+  mongoose.connect(`mongodb://mongo:27017`, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("mongoDB is connected...");
     }
-  );
+  });
 }
-
-connectDB();
 
 // redis 연결
 const redisClient = redis.createClient({
