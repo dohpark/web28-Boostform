@@ -24,21 +24,15 @@ const Text = styled.p`
   margin-top: 36px;
   margin-bottom: 24px;
   font-size: 20px;
-  color: ${({ theme }) => theme.colors.grey5};
   line-height: 28px;
   user-select: none;
 `;
 
 const ImageContainer = styled.div`
+  position: relative;
   width: 512px;
   margin-left: 36px;
   user-select: none;
 `;
 
-const Image = styled.img`
-  width: 100%;
-  min-width: 400px;
-  max-width: 600px;
-`;
-
-export { Container, TextContainer, ImageContainer, H1, Image, Text };
+export { Container, TextContainer, ImageContainer, H1, Text };

@@ -10,7 +10,6 @@ const Layout = styled.div`
 
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.black};
 
     &:active {
       text-decoration: none;

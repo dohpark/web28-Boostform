@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import Example from "assets/Images/Example.png";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { AuthContext } from "contexts/authProvider";
 import FormLayout from "components/template/Layout";
 import Button from "components/common/Button";
@@ -9,11 +11,11 @@ import * as S from "./style";
 
 function Main() {
   const { auth } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleClick = () => {
     const path = auth?.userId ? "/myForms" : "/login";
-    navigate(path);
+    router.push(path);
   };
 
   return (
@@ -33,7 +35,14 @@ function Main() {
           </Button>
         </S.TextContainer>
         <S.ImageContainer>
-          <S.Image src={Example} alt="example" draggable={false} />
+          <Image
+            style={{ minWidth: "400px", maxWidth: "600px" }}
+            src="/images/Example.png"
+            alt="example"
+            width={0}
+            height={0}
+            draggable={false}
+          />
         </S.ImageContainer>
       </S.Container>
     </FormLayout>
