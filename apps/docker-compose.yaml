@@ -14,14 +14,26 @@ services:
       - redis
       - mysql
 
+  client-legacy:
+    build: ./clientLegacy
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./clientLegacy/src:/app/src
+    env_file:
+      - ./.client.env
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+
   client:
     build: ./client
     ports:
       - "3000:3000"
     volumes:
       - ./client/src:/app/src
-    env_file:
-      - ./.client.env
+      - /app/.next
     stdin_open: true
     tty: true
     depends_on:

@@ -19,7 +19,7 @@ function Login() {
     <section className="w-full h-screen flex items-center justify-center select-none bg-blue3">
       <div className="flex flex-col items-center justify-center w-[600px] pt-20 pb-14 border border-grey3 rounded-lg bg-white">
         <Image src="/icons/github.svg" height={16} width={16} alt="github icon" />
-        <Image src="/icons/logo.svg" width={100} height={50} alt="logo" draggable={false} />
+        <Image src="/images/Logo.png" width={300} height={50} alt="logo" draggable={false} />
         <button
           onClick={handleClickOAuth}
           className="w-[460px] flex items-center justify-center bg-black border-none text-white mt-9 py-2 px-4 text-base rounded-lg cursor-pointer font-medium"
