@@ -23,7 +23,7 @@
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-toastify": "^9.1.1",
-    "styled-components": "^5.3.6",
+    "styled-components": "^5.3.11",
     "styled-reset": "^4.4.2",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"

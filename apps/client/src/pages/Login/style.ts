@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import theme from "styles/theme";
 
 const Container = styled.section`
   width: 100%;
@@ -8,7 +9,7 @@ const Container = styled.section`
   justify-content: center;
   user-select: none;
 
-  background-color: ${({ theme }) => theme.colors.blue3};
+  background-color: #3c64b1;
 `;
 
 const Img = styled.img`
@@ -25,9 +26,9 @@ const LoginContainer = styled.div`
   width: 600px;
   padding-top: 80px;
   padding-bottom: 60px;
-  border: 1px solid ${({ theme }) => theme.colors.grey3};
+  border: 1px solid #c8c8c8;
   border-radius: 9px;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: #ffffff;
 `;
 
 const OAuthButton = styled.button`
@@ -38,7 +39,7 @@ const OAuthButton = styled.button`
 
   background-color: black;
   border: none;
-  color: ${({ theme }) => theme.colors.white};
+  color: #ffffff;
   margin-top: 36px;
   padding: 8px 16px;
   font-size: 16px;
@@ -49,9 +50,9 @@ const OAuthButton = styled.button`
 const HomeButton = styled.button`
   width: 460px;
 
-  background-color: ${({ theme }) => theme.colors.grey2};
+  background-color: #dfdfdf;
   border: none;
-  color: ${({ theme }) => theme.colors.black};
+  color: #000000;
   margin-top: 16px;
   padding: 8px 16px;
   font-size: 16px;
