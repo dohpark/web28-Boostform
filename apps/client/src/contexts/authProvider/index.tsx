@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
