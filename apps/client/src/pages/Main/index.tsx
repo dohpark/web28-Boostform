@@ -3,9 +3,9 @@
 import React, { useContext } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "contexts/authProvider";
-import FormLayout from "components/template/Layout";
-import Button from "components/common/Button";
+import { AuthContext } from "@/contexts/authProvider";
+import FormLayout from "@/components/template/Layout";
+import Button from "@/components/common/Button";
 
 function Main() {
   const { auth } = useContext(AuthContext);

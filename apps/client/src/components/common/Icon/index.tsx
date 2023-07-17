@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactComponent as Plus } from "assets/Icon/plus.svg";
+import { ReactComponent as Plus } from "@public/icons/plus.svg";
 import { ReactComponent as Kebab } from "assets/Icon/kebab.svg";
 import { ReactComponent as TrashCan } from "assets/Icon/trashcan.svg";
 import { ReactComponent as Text } from "assets/Icon/text.svg";

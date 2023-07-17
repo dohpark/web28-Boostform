@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import formApi from "api/formApi";
-import Button from "components/common/Button";
+import formApi from "@/api/formApi";
+import Button from "@/components/common/Button";
 import EditFormNameModalProps from "./type";
 
 function EditFormNameModal({ closeModal, selectedFormId, refetchData }: EditFormNameModalProps) {

@@ -33,6 +33,7 @@ services:
       - "3000:3000"
     volumes:
       - ./client/src:/app/src
+      - ./client/.next:/app/.next
       - /app/.next
     stdin_open: true
     tty: true

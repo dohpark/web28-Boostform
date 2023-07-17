@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "contexts/authProvider";
-import authApi from "api/authApi";
-import Button from "components/common/Button";
+import { AuthContext } from "@/contexts/authProvider";
+import authApi from "@/api/authApi";
+import Button from "@/components/common/Button";
 
 function Header() {
   const { auth, setAuth } = useContext(AuthContext);

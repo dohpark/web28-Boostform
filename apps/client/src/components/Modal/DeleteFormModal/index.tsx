@@ -1,6 +1,6 @@
 import React from "react";
-import formApi from "api/formApi";
-import Button from "components/common/Button";
+import formApi from "@/api/formApi";
+import Button from "@/components/common/Button";
 import DeleteFormModalProps from "./type";
 
 function DeleteFormModal({ closeModal, refetchData, selectedFormId }: DeleteFormModalProps) {
