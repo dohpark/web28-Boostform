@@ -2,7 +2,6 @@
 
 import React, { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import formApi from "@/api/formApi";
@@ -17,6 +16,7 @@ import useLoadingDelay from "@/hooks/useLoadingDelay";
 import useModal from "@/hooks/useModal";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import { FormList } from "@/types/myForms";
+import Plus from "@public/icons/plus.svg";
 
 function MyForms() {
   const [modalType, setModalType] = useState("delete");
@@ -81,7 +81,7 @@ function MyForms() {
       <section className="min-w-[1024px] my-0 mx-8">
         <div className="mt-6 mb-4">
           <Button type="button" onClick={onClickCreateForm} className="bg-blue3 text-white text-base">
-            <Image src="/icons/plus.svg" height={24} width={24} alt="plus icon" />
+            <Plus height="24" width="24" fill="white" />
             <span className="ml-1">새 설문지</span>
           </Button>
         </div>
