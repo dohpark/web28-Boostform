@@ -8,7 +8,7 @@ function Login() {
   const router = useRouter();
 
   const handleClickOAuth: React.MouseEventHandler<HTMLButtonElement> = async () => {
-    window.location.href = `${process.env.REACT_APP_SERVER_ORIGIN_URL}/api/users/redirect`;
+    window.location.href = `http://127.0.0.1:8080/api/users/redirect`;
   };
 
   const handleClickHome: React.MouseEventHandler<HTMLButtonElement> = () => {
