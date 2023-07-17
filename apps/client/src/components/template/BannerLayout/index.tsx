@@ -1,19 +1,22 @@
 import React from "react";
-import Banner from "assets/Images/Banner.png";
+import Image from "next/image";
 import Header from "components/Header";
-import * as S from "./style";
 import LayoutProps from "./type";
 
-function BannerLayout({ children, backgroundColor, title, description }: LayoutProps) {
+function BannerLayout({ children, title, description }: LayoutProps) {
   return (
     <>
       <Header />
-      <S.BannerContainer>
-        <S.h1Title>{title}</S.h1Title>
-        <S.pDescription>{description}</S.pDescription>
-        <S.imgBanner alt="banner" src={Banner} />
-      </S.BannerContainer>
-      <S.Main backgroundColor={backgroundColor}>{children}</S.Main>
+      <div className="relative w-full h-[160px]">
+        <h1 className="absolute text-3xl font-medium text-center text-white left-0 right-0 my-0 mx-auto top-12 z-10">
+          {title}
+        </h1>
+        <p className="absolute text-center text-base text-grey0 left-0 right-0 my-0 mx-auto top-24 z-10">
+          {description}
+        </p>
+        <Image alt="banner" src="/images/Banner.png" objectFit="cover" fill />
+      </div>
+      <main className="ml-auto mr-auto flex justify-center bg-white">{children}</main>
     </>
   );
 }
