@@ -3,20 +3,18 @@ import { HTMLAttributes } from "react";
 interface DropdownProps {
   state: string;
   defaultState: string;
-  fontSize?: string;
   children: React.ReactNode;
+  className?: string;
 }
 
 interface HeadProps {
-  border?: string;
-  padding?: string;
-  color?: string;
-  bold?: boolean;
+  className?: string;
 }
 
 interface ItemProps {
   value: string;
   onClick: () => void;
+  className?: string;
 }
 
 interface ItemListProps extends HTMLAttributes<HTMLUListElement> {
