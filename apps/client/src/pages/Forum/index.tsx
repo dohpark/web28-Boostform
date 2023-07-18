@@ -1,36 +1,27 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
-import boardApi from "api/forumApi";
-import Layout from "components/template/BannerLayout";
-import Button from "components/common/Button";
-import TextDropdown from "components/common/Dropdown/TextDropdown";
-import Card from "components/common/Card";
-import Pagination from "components/common/Pagination";
-import Notice from "components/common/Notice";
-import Skeleton from "components/common/Skeleton";
-import useLoadingDelay from "hooks/useLoadingDelay";
-import { CATEGORY_FORUM_LIST } from "store/form";
-import theme from "styles/theme";
-import { ForumCategory, OrderBy } from "types/forum";
-import * as S from "./style";
-
-interface FormList {
-  formId: string;
-  title: string;
-  category: string;
-  responseCount: number;
-}
-
-interface ForumApi {
-  form: FormList[];
-  lastPage: number;
-}
+import boardApi from "@/api/forumApi";
+import Layout from "@/components/template/BannerLayout";
+import Button from "@/components/common/Button";
+import TextDropdown from "@/components/common/Dropdown/TextDropdown";
+import Card from "@/components/common/Card";
+import Pagination from "@/components/common/Pagination";
+import Notice from "@/components/common/Notice";
+import Skeleton from "@/components/common/Skeleton";
+import useLoadingDelay from "@/hooks/useLoadingDelay";
+import { CATEGORY_FORUM_LIST } from "@/store/form";
+import { ForumCategory, OrderBy } from "@/types/forum";
+import { ForumApi, SearchParams } from "./type";
 
 function Forum() {
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const initPage = Number(searchParams.get("page")) || 1;
   const initCategory = searchParams.get("category") || "";
   const initKeyword = searchParams.get("keyword") || "";
@@ -69,90 +60,108 @@ function Forum() {
 
   const loadingDelay = useLoadingDelay(isLoading);
 
-  const checkApiLoadingOrError = () => {
-    if (isLoading || loadingDelay || isError) return true;
-    return false;
+  const checkApiLoadingOrError = () => isLoading || loadingDelay || isError;
+  const createQueryString = ({ page, category, keyword, orderBy }: SearchParams) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    params.set("category", category);
+    params.set("keyword", keyword);
+    params.set("orderBy", orderBy);
+
+    return params.toString();
+  };
+
+  const mutateSearchParams = (params: SearchParams) => {
+    const queryString = createQueryString(params);
+    router.push(`${pathname}?${queryString}`);
   };
 
   const onSubmitSearchKeyword: React.FormEventHandler<HTMLElement> = (e) => {
     e.preventDefault();
-    setSearchParams({ page: "1", category, keyword: inputSearch, orderBy });
+    mutateSearchParams({ page: 1, category, keyword: inputSearch, orderBy });
   };
 
   return (
-    <Layout backgroundColor="white" title="설문조사 게시판" description="다양한 설문조사를 만나보세요">
-      <S.divContainer>
-        <S.divSearchBox onSubmit={onSubmitSearchKeyword}>
-          <S.inputSearch
+    <Layout title="설문조사 게시판" description="다양한 설문조사를 만나보세요">
+      <div className="min-w-[1024px] my-0 mx-8">
+        <form className="mt-9 mb-2 flex" onSubmit={onSubmitSearchKeyword}>
+          <input
+            className="w-[calc(100%-60px)] h-9 py-0 px-2 border border-grey3 rounded-sm text-xs align-top"
             type="text"
             placeholder="검색어를 입력해주세요"
             onInput={(e) => setInputSearch(e.currentTarget.value)}
             value={inputSearch}
           />
-          <Button
-            type="submit"
-            onSubmit={onSubmitSearchKeyword}
-            fontSize={theme.fontSize.sz12}
-            backgroundColor={theme.colors.blue3}
-            color={theme.colors.white}
-            style={{ marginLeft: "2px" }}
-          >
+          <Button type="submit" onSubmit={onSubmitSearchKeyword} className="text-xs bg-blue3 text-white ml-1">
             검색
           </Button>
-        </S.divSearchBox>
-        <S.divSortWrapper>
-          <S.divSortList>
-            <S.inputRadio
-              type="radio"
-              id="latestAsc"
-              value="latestAsc"
-              checked={orderBy === "latestAsc"}
-              onChange={() => {
-                setSearchParams({ page: "1", category, keyword, orderBy: "latestAsc" });
-              }}
-            />
-            <S.labelRadio htmlFor="latestAsc">최신순</S.labelRadio>
-
-            <S.inputRadio
-              type="radio"
-              id="responseAsc"
-              value="responseAsc"
-              checked={orderBy === "responseAsc"}
-              onChange={() => {
-                setSearchParams({ page: page.toString(), category, keyword, orderBy: "responseAsc" });
-              }}
-            />
-            <S.labelRadio htmlFor="responseAsc">응답 높은순</S.labelRadio>
-
-            <S.inputRadio
-              type="radio"
-              id="responseDesc"
-              value="responseDesc"
-              checked={orderBy === "responseDesc"}
-              onChange={() => {
-                setSearchParams({ page: "1", category, keyword, orderBy: "responseDesc" });
-              }}
-            />
-            <S.labelRadio htmlFor="responseDesc">응답 낮은순</S.labelRadio>
-          </S.divSortList>
-          <S.divCategoryWrapper>
-            <S.spanCategoryText>카테고리</S.spanCategoryText>
-            <TextDropdown state={category} defaultState="카테고리를 선택해주세요" fontSize={theme.fontSize.sz12}>
-              <TextDropdown.Head border="none" padding="0px" color={theme.colors.blue3} bold />
-              <TextDropdown.ItemList style={{ top: "26px" }}>
+        </form>
+        <div className="w-full h-9 mb-2 flex justify-between items-center">
+          <div className="flex">
+            <label className="ml-6">
+              <input
+                className="hidden peer"
+                type="radio"
+                id="latestAsc"
+                value="latestAsc"
+                checked={orderBy === "latestAsc"}
+                onChange={() => {
+                  mutateSearchParams({ page: 1, category, keyword, orderBy: "latestAsc" });
+                }}
+              />
+              <div className="text-xs text-grey8 cursor-pointer peer-checked:text-blue3 peer-checked:font-bold">
+                최신순
+              </div>
+            </label>
+            <label className="ml-6">
+              <input
+                className="hidden peer"
+                type="radio"
+                id="responseAsc"
+                value="responseAsc"
+                checked={orderBy === "responseAsc"}
+                onChange={() => {
+                  mutateSearchParams({ page, category, keyword, orderBy: "responseAsc" });
+                }}
+              />
+              <div className="text-xs text-grey8 cursor-pointer peer-checked:text-blue3 peer-checked:font-bold">
+                응답 높은순
+              </div>
+            </label>
+            <label className="ml-6">
+              <input
+                className="hidden peer"
+                type="radio"
+                id="responseDesc"
+                value="responseDesc"
+                checked={orderBy === "responseDesc"}
+                onChange={() => {
+                  mutateSearchParams({ page: 1, category, keyword, orderBy: "responseDesc" });
+                }}
+              />
+              <div className="text-xs text-grey8 cursor-pointer peer-checked:text-blue3 peer-checked:font-bold">
+                응답 낮은순
+              </div>
+            </label>
+          </div>
+          <div className="flex items-center pt-2">
+            <span className="text-xs mr-2 align-middle text-grey8">카테고리</span>
+            <TextDropdown state={category} defaultState="카테고리를 선택해주세요" className="text-xs">
+              <TextDropdown.Head className="border-none p-0 text-blue3 font-bold text-xs" />
+              <TextDropdown.ItemList className="top-6 text-xs">
                 {CATEGORY_FORUM_LIST.map((value) => (
                   <TextDropdown.Item
                     key={value}
                     value={value}
                     onClick={() => {
-                      setSearchParams({ page: "1", category: value, keyword, orderBy });
+                      mutateSearchParams({ page: 1, category: value, keyword, orderBy });
                     }}
                   />
                 ))}
               </TextDropdown.ItemList>
             </TextDropdown>
-          </S.divCategoryWrapper>
-        </S.divSortWrapper>
+          </div>
+        </div>
         {!loadingDelay && data?.form.length ? (
           <>
             <Card>
@@ -167,19 +176,15 @@ function Forum() {
                   <Card.ButtonWrapper>
                     <Button
                       type="button"
-                      onClick={() => navigate(`/forms/${formId}/view`)}
-                      backgroundColor={theme.colors.blue3}
-                      color={theme.colors.white}
-                      style={{ marginRight: "8px" }}
+                      onClick={() => router.push(`/forms/${formId}/view`)}
+                      className="bg-blue3 text-white mr-2 text-sm"
                     >
                       설문조사 참여하기
                     </Button>
                     <Button
                       type="button"
-                      onClick={() => navigate(`/forms/${formId}/result`)}
-                      border={theme.colors.blue3}
-                      backgroundColor={theme.colors.white}
-                      color={theme.colors.blue3}
+                      onClick={() => router.push(`/forms/${formId}/result`)}
+                      className="border border-blue3 bg-white text-blue3 text-sm"
                     >
                       설문조사 결과보기
                     </Button>
@@ -191,7 +196,7 @@ function Forum() {
               currentPage={page}
               lastPage={Number(data?.lastPage)}
               callback={(pageNumber: number) => {
-                setSearchParams({ page: pageNumber.toString(), category, keyword, orderBy: "responseDesc" });
+                mutateSearchParams({ page: pageNumber, category, keyword, orderBy: "responseDesc" });
               }}
             />
           </>
@@ -209,8 +214,10 @@ function Forum() {
               </Skeleton>
             ))
           : null}
-        {!loadingDelay && isSuccess && !data.form.length ? <Notice text="설문지가 존재하지 않습니다" /> : null}
-      </S.divContainer>
+        {!loadingDelay && isSuccess && !data.form.length ? (
+          <Notice text="설문지가 존재하지 않습니다" className="border border-blue3 text-blue3 text-sm" />
+        ) : null}
+      </div>
     </Layout>
   );
 }
