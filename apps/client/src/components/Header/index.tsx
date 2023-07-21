@@ -25,7 +25,15 @@ function Header() {
     <header className="box-content flex bg-white my-4 mx-8">
       <div className="min-w-[1024px] ml-auto mr-auto flex items-center justify-between">
         <Link className="no-underline	decoration-black active:no-underline active:decoration-black" href="/">
-          <Image src="icons/logo.svg" alt="logo" width={80} height={80} draggable={false} />
+          <Image
+            src="/icons/logo.svg"
+            alt="logo"
+            width={100}
+            height={100}
+            style={{ width: "80px", height: "80px" }}
+            draggable={false}
+            priority
+          />
         </Link>
         <div className="flex items-center justify-end">
           {auth?.userId && (

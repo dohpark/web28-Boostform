@@ -14,7 +14,7 @@ function BannerLayout({ children, title, description }: LayoutProps) {
         <p className="absolute text-center text-base text-grey0 left-0 right-0 my-0 mx-auto top-24 z-10">
           {description}
         </p>
-        <Image alt="banner" src="/images/Banner.png" objectFit="cover" fill />
+        <Image alt="banner" src="/images/Banner.png" priority fill />
       </div>
       <main className="ml-auto mr-auto flex justify-center bg-white">{children}</main>
     </>

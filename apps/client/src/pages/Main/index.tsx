@@ -32,11 +32,11 @@ function Main() {
         </div>
         <div className="relative w-[512px] ml-9 select-none">
           <Image
-            style={{ minWidth: "400px", maxWidth: "600px" }}
             src="/images/Example.png"
             alt="example"
-            width={500}
-            height={500}
+            width="675"
+            height="949"
+            className="w-full min-w-[400px] max-w-[600px]"
             draggable={false}
           />
         </div>
