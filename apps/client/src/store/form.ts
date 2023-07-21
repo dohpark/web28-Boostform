@@ -1,6 +1,6 @@
-import { IconItem } from "components/common/Dropdown/IconDropdown/type";
-import { ForumCategory } from "types/forum";
-import { FormState } from "types/form";
+import { IconItem } from "@/components/common/Dropdown/IconDropdown/type";
+import { ForumCategory } from "@/types/forum";
+import { FormState } from "@/types/form";
 
 const CATEGORY_LIST = ["개발 및 학습", "취업 및 채용", "취미 및 여가", "기타"];
 
