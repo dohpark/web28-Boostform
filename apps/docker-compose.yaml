@@ -32,9 +32,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./client/src:/app/src
-      - ./client/.next:/app/.next
-      - /app/.next
+      - ./client:/app
+      - /app/node_modules
     stdin_open: true
     tty: true
     depends_on:
