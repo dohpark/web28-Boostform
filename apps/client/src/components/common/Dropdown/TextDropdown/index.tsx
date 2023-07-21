@@ -57,7 +57,7 @@ function Item({ value, onClick, className: customCss }: ItemProps) {
   const className = `${defaultCss} ${customCss}`;
 
   return (
-    <li className="text-left hover:bg-grey1">
+    <li className="text-left hover:bg-grey1 text-sm">
       <button
         className={className}
         type="button"
