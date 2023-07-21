@@ -22,7 +22,7 @@ function Header() {
   };
 
   return (
-    <header className="box-content flex bg-white my-4 mx-8">
+    <header className="box-content flex bg-white mx-8">
       <div className="min-w-[1024px] ml-auto mr-auto flex items-center justify-between">
         <Link className="no-underline	decoration-black active:no-underline active:decoration-black" href="/">
           <Image
