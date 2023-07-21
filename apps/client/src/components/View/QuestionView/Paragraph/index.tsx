@@ -1,8 +1,7 @@
-import Icon from "components/common/Icon";
 import React from "react";
-import theme from "styles/theme";
+import Error from "@public/icons/error.svg";
 import { QuestionViewProps } from "../type";
-import * as S from "./style";
+import COLORS from "@/constants/color";
 
 function Paragraph({
   questionState,
@@ -43,12 +42,17 @@ function Paragraph({
 
   return (
     <>
-      <S.ParagraphInput placeholder="내 답변" defaultValue={selection || ""} onInput={onInputEditAnswer} />
+      <input
+        className="w-full mt-2 block py-1 px-0 border-b border-b-grey3 focus:outline-none focus:border-b focus:border-b-black leading-7 text-sm"
+        placeholder="내 답변"
+        defaultValue={selection || ""}
+        onInput={onInputEditAnswer}
+      />
       {validationMode && !validation[questionId] && essential && (
-        <S.VaidationWrapper>
-          <Icon type="error" size="16px" fill={theme.colors.red1} />
-          <S.ValidationText>필수 질문입니다!</S.ValidationText>
-        </S.VaidationWrapper>
+        <div className="flex items-center mt-2 text-xs text-red1">
+          <Error width="16" height="16" fill={COLORS.red1} />
+          <span className="ml-1">필수 질문입니다!</span>
+        </div>
       )}
     </>
   );

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Icon from "components/common/Icon";
-import IconButton from "components/common/IconButton";
-import theme from "styles/theme";
+import IconButton from "@/components/common/IconButton";
+import Error from "@public/icons/error.svg";
+import MultipleFull from "@public/icons/multipleFull.svg";
+import MultipleEmpty from "@public/icons/multipleEmpty.svg";
 import { QuestionViewProps } from "../type";
-import * as S from "./style";
+import COLORS from "@/constants/color";
 
 function Multiple({
   questionState,
@@ -50,31 +51,29 @@ function Multiple({
   };
 
   return (
-    <S.Container>
+    <div className="mt-5">
       {option.map(({ choiceId, value }) => (
-        <S.MultipleWrapper key={choiceId}>
+        <div className="flex items-center mt-1" key={choiceId}>
           {!selected.includes(value) && (
-            <IconButton type="button" onClick={() => onClickSelectOption(value)} icon="multipleEmpty" size="20px" />
+            <IconButton type="button" onClick={() => onClickSelectOption(value)}>
+              <MultipleEmpty height="20" width="20" viewBox="0 0 24 24" />
+            </IconButton>
           )}
           {selected.includes(value) && (
-            <IconButton
-              type="button"
-              onClick={() => onClickDeselectOption(value)}
-              icon="multipleFull"
-              size="20px"
-              fill={theme.colors.blue3}
-            />
+            <IconButton type="button" onClick={() => onClickDeselectOption(value)}>
+              <MultipleFull height="20" width="20" fill={COLORS.blue3} viewBox="0 0 24 24" />
+            </IconButton>
           )}
-          <S.Option>{value}</S.Option>
-        </S.MultipleWrapper>
+          <div className="text-sm ml-2 leading-7">{value}</div>
+        </div>
       ))}
       {validationMode && !validation[questionId] && essential && (
-        <S.VaidationWrapper>
-          <Icon type="error" size="16px" fill={theme.colors.red1} />
-          <S.ValidationText>필수 질문입니다!</S.ValidationText>
-        </S.VaidationWrapper>
+        <div className="flex items-center mt-2 text-xs text-red1">
+          <Error width="16" height="16" fill={COLORS.red1} />
+          <span className="ml-1">필수 질문입니다!</span>
+        </div>
       )}
-    </S.Container>
+    </div>
   );
 }
 
