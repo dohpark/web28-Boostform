@@ -151,7 +151,7 @@ function Edit() {
   };
 
   const onClickCopyLink = () => {
-    window.navigator.clipboard.writeText(`${process.env.REACT_APP_CLIENT_ORIGIN_URL}/forms/${id}/view`);
+    window.navigator.clipboard.writeText(`${"127.0.0.1:3000"}/forms/${id}/view`);
     toast.success("링크가 복사되었습니다!", {
       position: "top-right",
       autoClose: 2000,
