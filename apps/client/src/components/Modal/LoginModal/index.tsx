@@ -1,36 +1,28 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "components/common/Button";
-import theme from "styles/theme";
-import * as S from "./style";
+import Button from "@/components/common/Button";
+import { useRouter } from "next/navigation";
 
 function LoginModal({ closeModal }: { closeModal: () => void }) {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const onClickLogin = () => {
-    closeModal();
-    navigate("/login");
+    router.push("/login");
   };
 
   return (
-    <S.Container>
-      <S.Title>계속 하려면 로그인</S.Title>
-      <S.Text>이 설문지를 작성하려면 로그인해야 합니다. 신원은 익명으로 유지됩니다.</S.Text>
-      <S.ButtonContainer>
+    <div className="absolute top-[40%] left-1/2 -translate-y-1/2 -translate-x-1/2 w-[400px] rounded p-6 z-20 bg-white">
+      <h2 className="mb-5 text-xl font-normal">계속 하려면 로그인</h2>
+      <p className="mb-4 text-sm">이 설문지를 작성하려면 로그인해야 합니다. 신원은 익명으로 유지됩니다.</p>
+      <div className="flex justify-end">
         <Button
           type="button"
           onClick={onClickLogin}
-          backgroundColor={theme.colors.white}
-          border={theme.colors.blue2}
-          color={theme.colors.blue2}
-          fontSize={theme.fontSize.sz12}
-          hover={theme.colors.blue0}
-          active
+          className="bg-white border border-blue2 text-blue2 text-xs hover:text-blue0 active:translate-y-[1px]"
         >
           로그인
         </Button>
-      </S.ButtonContainer>
-    </S.Container>
+      </div>
+    </div>
   );
 }
 
