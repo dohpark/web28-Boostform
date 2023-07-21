@@ -1,10 +1,9 @@
 import React from "react";
-import ToggleButton from "components/common/ToggleButton";
-import Icon from "components/common/Icon";
-import Button from "components/common/Button";
-import theme from "styles/theme";
-import * as S from "./style";
+import ToggleButton from "@/components/common/ToggleButton";
+import Button from "@/components/common/Button";
+import Chain from "@public/icons/chain.svg";
 import ShareFormModalProps from "./type";
+import COLORS from "@/constants/color";
 
 function ShareFormModal({
   formState,
@@ -24,62 +23,42 @@ function ShareFormModal({
   };
 
   return (
-    <S.Container>
-      <S.Title>공유설정</S.Title>
+    <div className="absolute top-[40%] left-1/2 -translate-y-1/2 -translate-x-1/2 w-[600px] rounded p-9 z-20 bg-white">
+      <div className="text-xl">공유설정</div>
       <div>
-        <S.ToggleWrapper>
+        <div className="flex justify-between items-center mt-3">
           <span>응답 받기</span>
           <ToggleButton state={acceptResponse} onClick={changeAcceptResponse} />
-        </S.ToggleWrapper>
-        <S.ToggleWrapper>
+        </div>
+        <div className="flex justify-between items-center mt-3">
           <span>응답횟수 1회로 제한 (로그인 필수)</span>
           <ToggleButton state={loginRequired} onClick={changeLoginRequired} />
-        </S.ToggleWrapper>
-        <S.ToggleWrapper>
+        </div>
+        <div className="flex justify-between items-center mt-3">
           <span>응답 수정 가능</span>
           <ToggleButton state={responseModifiable} onClick={changeResponseModifiable} />
-        </S.ToggleWrapper>
-        <S.ToggleWrapper>
+        </div>
+        <div className="flex justify-between items-center mt-3">
           <span>게시판에 공유하기</span>
           <ToggleButton state={onBoard} onClick={changeOnBoardShare} />
-        </S.ToggleWrapper>
-        <S.ToggleWrapper>
+        </div>
+        <div className="flex justify-between items-center mt-3">
           <span>링크</span>
-          <Button
-            type="button"
-            onClick={copyLink}
-            border="none"
-            backgroundColor="transparent"
-            fontSize={theme.fontSize.sz12}
-          >
-            <Icon type="chain" fill={theme.colors.blue3} size="24px" />
-            <S.CopyLinkText>링크 복사하기</S.CopyLinkText>
+          <Button type="button" onClick={copyLink} className="border-none bg-transparent text-xs p-0">
+            <Chain fill={COLORS.blue3} height="24" width="24" />
+            <span className="text-blue4 ml-2">링크 복사하기</span>
           </Button>
-        </S.ToggleWrapper>
+        </div>
       </div>
-      <S.ButtonContainer>
-        <Button
-          type="button"
-          onClick={onClickSave}
-          backgroundColor={theme.colors.blue5}
-          border={theme.colors.grey2}
-          color={theme.colors.white}
-          style={{ marginRight: "12px" }}
-        >
+      <div className="mt-3 flex justify-end">
+        <Button type="button" onClick={onClickSave} className="bg-blue5 border border-grey2 text-white mr-3 text-sm">
           저장
         </Button>
-        <Button
-          type="button"
-          onClick={onClickCancel}
-          backgroundColor={theme.colors.blue5}
-          border={theme.colors.grey2}
-          color={theme.colors.white}
-          active={false}
-        >
+        <Button type="button" onClick={onClickCancel} className="bg-blue5 border border-grey2 text-white text-sm">
           취소
         </Button>
-      </S.ButtonContainer>
-    </S.Container>
+      </div>
+    </div>
   );
 }
 
