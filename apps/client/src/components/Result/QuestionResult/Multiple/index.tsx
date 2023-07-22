@@ -1,8 +1,8 @@
 import React from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { AnswerTotal } from "types/result";
-import randomRGBGenerator from "utils/randomRGBGenerator";
+import { AnswerTotal } from "@/types/result";
+import randomRGBGenerator from "@/utils/randomRGBGenerator";
 
 function Multiple({ answerTotal }: { answerTotal: AnswerTotal }) {
   ChartJS.register(CategoryScale, LinearScale, BarElement);
