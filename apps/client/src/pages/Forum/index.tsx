@@ -204,7 +204,7 @@ function Forum() {
 
         {checkApiLoadingOrError()
           ? Array.from({ length: 3 }, (_, index) => index).map((value) => (
-              <Skeleton key={value}>
+              <Skeleton key={value} className="px-5 py-3">
                 <Skeleton.Element type="title" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Element type="text" />

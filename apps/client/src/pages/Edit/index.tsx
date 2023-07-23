@@ -262,7 +262,7 @@ function Edit() {
                   <Skeleton.Shimmer />
                 </div>
               ))}
-              <div className="flex justify-end mt-4 mb-0 mx-8 bg-white rounded p-5 relative overflow-hidden">
+              <div className="flex justify-end mt-4 mb-0 bg-white rounded p-5 relative overflow-hidden">
                 <Skeleton.Element type="button" />
                 <Skeleton.Shimmer />
               </div>

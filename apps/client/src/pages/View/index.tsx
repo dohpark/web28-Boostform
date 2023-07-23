@@ -184,7 +184,7 @@ function View() {
               <Skeleton.Shimmer />
             </div>
             {Array.from({ length: 2 }, (_, index) => index).map((value) => (
-              <div className="mt-4 bg-white rounded p-5" key={value}>
+              <div className="mt-4 bg-white rounded p-5 relative overflow-hidden" key={value}>
                 <Skeleton.Element type="formQuestionTitle" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Element type="text" />
