@@ -24,8 +24,24 @@ module.exports = {
       red0: "#ffc9c9",
       red1: "#d93025",
     },
-
-    extend: {},
+    extend: {
+      animation: {
+        loading: "loading 2.5s infinite",
+      },
+      keyframes: {
+        loading: {
+          "0%": {
+            transform: "translateX(-150%)",
+          },
+          "50%": {
+            transform: "translateX(-60%)",
+          },
+          "100%": {
+            transform: "translateX(150%)",
+          },
+        },
+      },
+    },
   },
   plugins: [],
 };
