@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import * as S from "./style";
 import ModalPortalProps from "./type";
 
 const useModal = (option?: { setBackgroundClickClose: boolean }) => {
@@ -33,10 +32,10 @@ const useModal = (option?: { setBackgroundClickClose: boolean }) => {
   function ModalPortal({ children }: ModalPortalProps) {
     if (modalOpen)
       return createPortal(
-        <S.ModalContainer>
+        <div className="w-full h-full fixed top-0 left-0 z-10 m-0">
           {children}
-          <S.ModalBackground onClick={onClickBackgroundCloseModal} />
-        </S.ModalContainer>,
+          <div className="absolute w-full h-full bg-black bg-opacity-75" onClick={onClickBackgroundCloseModal} />
+        </div>,
         modalRoot
       );
     return null;
