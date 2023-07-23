@@ -1,4 +1,4 @@
-import { ResponseElement } from "types/response";
+import { ResponseElement } from "@/types/response";
 
 type FormViewAction =
   | { type: "FETCH_DATA"; init: ResponseElement[] }
