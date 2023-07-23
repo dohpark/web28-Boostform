@@ -1,19 +1,20 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
-import resultApi from "api/resultApi";
-import FormLayout from "components/template/Layout";
-import QuestionResult from "components/Result/QuestionResult";
-import Skeleton from "components/common/Skeleton";
-import useLoadingDelay from "hooks/useLoadingDelay";
-import { ResultApi, QuestionSummary } from "types/result";
-import * as S from "./style";
+import resultApi from "@/api/resultApi";
+import FormLayout from "@/components/template/Layout";
+import QuestionResult from "@/components/Result/QuestionResult";
+import Skeleton from "@/components/common/Skeleton";
+import useLoadingDelay from "@/hooks/useLoadingDelay";
+import { ResultApi, QuestionSummary } from "@/types/result";
+import { useParams } from "next/navigation";
 
 function Result() {
   const { id } = useParams();
 
-  const fetchForm = (): Promise<ResultApi> => resultApi.getResult(id);
+  const fetchForm = (): Promise<ResultApi> => resultApi.getResult(id as string);
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: [id, "result"],
     queryFn: fetchForm,
@@ -45,59 +46,59 @@ function Result() {
 
   return (
     <FormLayout backgroundColor="blue">
-      <S.Container>
+      <div className="w-[760px]">
         {checkApiLoadingOrError() ? (
           <>
-            <S.HeadContainer>
+            <div className="mt-9 bg-white rounded py-3 px-5 relative overflow-hidden">
               <Skeleton.Element type="formTitle" />
               <Skeleton.Element type="text" />
               <Skeleton.Element type="text" />
               <Skeleton.Shimmer />
-            </S.HeadContainer>
+            </div>
             {Array.from({ length: 2 }, (_, index) => index).map((value) => (
-              <S.QuestionContainer key={value}>
+              <div className="mt-4 bg-white rounded p-5 relative overflow-hidden last:mb-6" key={value}>
                 <Skeleton.Element type="formQuestionTitle" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Shimmer />
-              </S.QuestionContainer>
+              </div>
             ))}
           </>
         ) : null}
         {checkApiSuccess() ? (
           <>
-            <S.HeadContainer>
-              <S.HeadTitle>{formResult?.formTitle}</S.HeadTitle>
-              <S.OverallResponseCount>응답 {formResult?.totalResponseCount}개</S.OverallResponseCount>
-            </S.HeadContainer>
+            <div className="mt-9 bg-white rounded py-3 px-5 relative overflow-hidden">
+              <div className="w-full block text-2xl py-1 px-0 border-none leading-[48px]">{formResult?.formTitle}</div>
+              <div className="flex items-center">응답 {formResult?.totalResponseCount}개</div>
+            </div>
             {questionResult.length ? (
               questionResult.map(({ type, questionTitle, responseCount, answerTotal, key }) => (
-                <S.QuestionContainer key={key}>
+                <div className="mt-4 bg-white rounded p-5 relative overflow-hidden last:mb-6" key={key}>
                   <div>
                     <span>{questionTitle}</span>
                   </div>
                   {responseCount ? (
-                    <S.QuestionResponseCount>
+                    <div className="mt-2 mb-4 text-xs font-normal">
                       <span>응답 {responseCount}개</span>
-                    </S.QuestionResponseCount>
+                    </div>
                   ) : null}
                   {responseCount ? (
                     <QuestionResult type={type} answerTotal={answerTotal} />
                   ) : (
-                    <S.NoResponseQuestion>질문에 대한 응답이 없습니다.</S.NoResponseQuestion>
+                    <div className="mt-5 text-sm font-normal">질문에 대한 응답이 없습니다.</div>
                   )}
-                </S.QuestionContainer>
+                </div>
               ))
             ) : (
-              <S.QuestionContainer>
-                <S.NoResponseForm>설문지에 대한 응답이 없습니다.</S.NoResponseForm>
-              </S.QuestionContainer>
+              <div className="mt-4 bg-white rounded p-5 relative overflow-hidden last:mb-6">
+                <div className="text-sm font-normal">설문지에 대한 응답이 없습니다.</div>
+              </div>
             )}
           </>
         ) : null}
-      </S.Container>
+      </div>
     </FormLayout>
   );
 }
