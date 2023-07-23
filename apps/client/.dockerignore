@@ -1,2 +1,19 @@
+# dependencies
 node_modules
+
+# docker
 Dockerfile
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# next.js
+/.next/
+/out/
+
+# local env files
+.env

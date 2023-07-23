@@ -1,8 +1,8 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { AnswerTotal } from "types/result";
-import randomRGBGenerator from "utils/randomRGBGenerator";
+import { AnswerTotal } from "@/types/result";
+import randomRGBGenerator from "@/utils/randomRGBGenerator";
 
 function Checkbox({ answerTotal }: { answerTotal: AnswerTotal }) {
   ChartJS.register(ArcElement, Tooltip, Legend);

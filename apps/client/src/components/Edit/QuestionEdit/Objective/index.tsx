@@ -1,9 +1,10 @@
 import React from "react";
-import Icon from "components/common/Icon";
-import IconButton from "components/common/IconButton";
-import TextButton from "components/common/TextButton";
-import theme from "styles/theme";
-import * as S from "./style";
+import IconButton from "@/components/common/IconButton";
+import TextButton from "@/components/common/TextButton";
+import COLORS from "@/constants/color";
+import CheckboxEmpty from "@public/icons/checkboxEmpty.svg";
+import MultipleEmpty from "@public/icons/multipleEmpty.svg";
+import Close from "@public/icons/close.svg";
 import ObjectiveProps from "./type";
 
 function Objective({ index, questionState, addQuestionChoice, modifyChoice, deleteChoice }: ObjectiveProps) {
@@ -12,30 +13,30 @@ function Objective({ index, questionState, addQuestionChoice, modifyChoice, dele
   return (
     <div>
       {option.map(({ choiceId, value }, choiceIndex) => (
-        <S.ChoiceWrapper key={choiceId}>
-          {type === "checkbox" && <Icon type="checkboxEmpty" size="20px" fill={theme.colors.grey3} />}
-          {type === "multiple" && <Icon type="multipleEmpty" size="20px" fill={theme.colors.grey3} />}
-          <S.Input value={value} onInput={(e) => modifyChoice(index, choiceIndex, e.currentTarget.value)} />
+        <div className="flex items-center mt-1" key={choiceId}>
+          {type === "checkbox" && <CheckboxEmpty height="20" width="20" fill={COLORS.grey3} viewBox="0 0 24 24" />}
+          {type === "multiple" && <MultipleEmpty height="20" width="20" fill={COLORS.grey3} viewBox="0 0 24 24" />}
+          <input
+            className="w-[calc(100%-77px)] text-sm border-b border-b-white leading-7 ml-2 hover:border-b hover:border-b-grey3 focus:outline-none focus:border-b focus:border-b-black"
+            value={value}
+            onInput={(e: React.FormEvent<HTMLInputElement>) => modifyChoice(index, choiceIndex, e.currentTarget.value)}
+          />
           {questionState.option.length > 1 && (
-            <IconButton type="button" onClick={() => deleteChoice(index, choiceIndex)} icon="close" size="16px" />
+            <IconButton type="button" onClick={() => deleteChoice(index, choiceIndex)}>
+              <Close height="16" width="16" />
+            </IconButton>
           )}
-        </S.ChoiceWrapper>
+        </div>
       ))}
-      <S.ChoiceWrapper>
-        {type === "checkbox" && <Icon type="checkboxEmpty" size="20px" fill={theme.colors.grey3} />}
-        {type === "multiple" && <Icon type="multipleEmpty" size="20px" fill={theme.colors.grey3} />}
-        <S.AddOptionWrapper>
-          <TextButton
-            type="button"
-            color={theme.colors.grey5}
-            fontSize={theme.fontSize.sz14}
-            onClick={() => addQuestionChoice(index)}
-            style={{ paddingLeft: "2px" }}
-          >
+      <div className="flex items-center mt-1">
+        {type === "checkbox" && <CheckboxEmpty height="20" width="20" fill={COLORS.grey3} viewBox="0 0 24 24" />}
+        {type === "multiple" && <MultipleEmpty height="20" width="20" fill={COLORS.grey3} viewBox="0 0 24 24" />}
+        <div className="ml-2">
+          <TextButton type="button" onClick={() => addQuestionChoice(index)} className="text-grey5 text-sm">
             옵션 추가
           </TextButton>
-        </S.AddOptionWrapper>
-      </S.ChoiceWrapper>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,20 +1,16 @@
 import React from "react";
-import Icon from "components/common/Icon";
-import IconButtonComponent from "./style";
 import { IconButtonProps } from "./type";
 
-function IconButton({ size, type, active, fill, onClick, disabled, icon, style }: IconButtonProps) {
+function IconButton({ type, onClick, disabled, children, className: customCss }: IconButtonProps) {
+  const defaultCss =
+    "p-0 border-none rounded outline-none bg-transparent cursor-pointer inline-flex items-center justify-center hover:brightness-90 disabled:cursor-not-allowed disabled:brightness-150 ";
+  const className = defaultCss + customCss;
+
   return (
-    <IconButtonComponent onClick={onClick} disabled={disabled} active={active} type={type} style={style}>
-      <Icon size={size} type={icon} fill={fill} />
-    </IconButtonComponent>
+    <button onClick={onClick} disabled={disabled} type={type} className={className}>
+      {children}
+    </button>
   );
 }
-
-IconButton.defaultProps = {
-  fill: "black",
-  disabled: false,
-  active: false,
-};
 
 export default IconButton;

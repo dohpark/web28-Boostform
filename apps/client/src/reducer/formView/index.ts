@@ -1,4 +1,4 @@
-import { ResponseElement } from "types/response";
+import { ResponseElement } from "@/types/response";
 import FormViewAction from "./type";
 
 function formViewReducer(state: ResponseElement[], action: FormViewAction) {

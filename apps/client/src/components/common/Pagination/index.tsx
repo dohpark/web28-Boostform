@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import IconButton from "components/common/IconButton";
-import theme from "styles/theme";
-import * as S from "./style";
+import IconButton from "@/components/common/IconButton";
+import Left from "@public/icons/left.svg";
+import Right from "@public/icons/right.svg";
+import COLORS from "@/constants/color";
 
 interface PaginationProps {
   currentPage: number;
@@ -13,44 +14,48 @@ function Pagination({ currentPage, lastPage, callback }: PaginationProps) {
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
   useEffect(() => {
+    let temp: number[];
     if (lastPage < 5) {
-      const temp = [];
-      for (let i = 1; i <= lastPage; i += 1) temp.push(i);
-      setPageNumbers(temp);
+      temp = Array.from({ length: lastPage }, (_, i) => i + 1);
     } else if (![1, 2, lastPage, lastPage - 1].includes(currentPage)) {
-      setPageNumbers([currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2]);
-    } else if ([1, 2].includes(currentPage)) setPageNumbers([1, 2, 3, 4, 5]);
-    else setPageNumbers([lastPage - 4, lastPage - 3, lastPage - 2, lastPage - 1, lastPage]);
+      temp = [currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
+    } else if ([1, 2].includes(currentPage)) {
+      temp = [1, 2, 3, 4, 5];
+    } else {
+      temp = [lastPage - 4, lastPage - 3, lastPage - 2, lastPage - 1, lastPage];
+    }
+
+    setPageNumbers(temp);
   }, [currentPage, lastPage]);
 
   return (
-    <S.Container>
+    <div className="flex items-center justify-center py-2 px-10 mt-3">
+      <IconButton type="button" onClick={() => callback(currentPage - 1)} disabled={currentPage === 1} className="h-6">
+        <Left fill={COLORS.grey5} />
+      </IconButton>
+      <ul className="mx-2">
+        {pageNumbers.map((number) => {
+          const defaultCss = "w-6 my-0 mx-2 h-6 rounded-xl text-center text-sm font-medium cursor-pointer leading-6";
+          const conditionalCss = "text-white font-semibold bg-blue3";
+
+          const className = currentPage === number ? `${defaultCss} ${conditionalCss}` : defaultCss;
+
+          return (
+            <li key={number} onClick={() => callback(number)} className={className}>
+              {number}
+            </li>
+          );
+        })}
+      </ul>
       <IconButton
-        size="24px"
-        type="button"
-        onClick={() => callback(currentPage - 1)}
-        disabled={currentPage === 1}
-        icon="left"
-        fill={theme.colors.grey5}
-        style={{ height: "24px" }}
-      />
-      <S.PageNumberWrapper>
-        {pageNumbers.map((number) => (
-          <S.PageText key={number} current={currentPage === number} onClick={() => callback(number)}>
-            {number}
-          </S.PageText>
-        ))}
-      </S.PageNumberWrapper>
-      <IconButton
-        size="24px"
         type="button"
         onClick={() => callback(currentPage + 1)}
         disabled={currentPage === lastPage}
-        icon="right"
-        fill={theme.colors.grey5}
-        style={{ height: "24px" }}
-      />
-    </S.Container>
+        className="h-6"
+      >
+        <Right fill={COLORS.grey5} />
+      </IconButton>
+    </div>
   );
 }
 

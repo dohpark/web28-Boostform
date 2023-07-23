@@ -1,5 +1,5 @@
-import { QuestionType } from "types/form";
-import { AnswerTotal } from "types/result";
+import { QuestionType } from "@/types/form";
+import { AnswerTotal } from "@/types/result";
 
 interface QuestionResultProps {
   type: QuestionType;

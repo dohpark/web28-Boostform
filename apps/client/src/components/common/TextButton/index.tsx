@@ -1,18 +1,15 @@
 import React from "react";
-import TextButtonComponent from "./style";
 import { TextButtonProps } from "./type";
 
-function TextButton({ children, color, fontSize, style, onClick }: TextButtonProps) {
+function TextButton({ children, className: customCss, onClick }: TextButtonProps) {
+  const defaultCss = "b-0 outline-none m-0 p-0 bg-none cursor-pointer hover:decoration-solid hover:brightness-[85%]";
+  const className = `${defaultCss} ${customCss}`;
+
   return (
-    <TextButtonComponent color={color} fontSize={fontSize} onClick={onClick} style={style}>
-      <span>{children}</span>
-    </TextButtonComponent>
+    <button className={className} onClick={onClick}>
+      {children}
+    </button>
   );
 }
-
-TextButton.defaultProps = {
-  color: "black",
-  fontSize: "16px",
-};
 
 export default TextButton;

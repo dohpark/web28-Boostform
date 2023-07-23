@@ -1,7 +1,9 @@
+"use client";
+
 import React, { createContext, useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
-import authApi from "api/authApi";
+import authApi from "@/api/authApi";
 import { AuthContextProps, AuthProps } from "./type";
 
 export const AuthContext = createContext<AuthContextProps>({});

@@ -1,5 +1,5 @@
 import lodash from "lodash";
-import { FormState, QuestionState } from "types/form";
+import { FormState, QuestionState } from "@/types/form";
 import FormEditAction from "./type";
 
 function formEditReducer(state: FormState, action: FormEditAction) {

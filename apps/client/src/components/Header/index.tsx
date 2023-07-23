@@ -1,65 +1,62 @@
 import React, { useContext } from "react";
-import { AuthContext } from "contexts/authProvider";
-import { useNavigate, Link } from "react-router-dom";
-import authApi from "api/authApi";
-import Button from "components/common/Button";
-import Logo from "assets/Icon/logo.svg";
-import theme from "styles/theme";
-import * as S from "./style";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/contexts/authProvider";
+import authApi from "@/api/authApi";
+import Button from "@/components/common/Button";
 
 function Header() {
   const { auth, setAuth } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const onClickLogin = () => {
-    navigate("/login");
+    router.push("/login");
   };
 
   const onClickLogout = () => {
     if (!setAuth) return;
     authApi.logout();
     setAuth({ userId: "", userName: "" });
-    navigate("/");
+    router.push("/");
   };
 
   return (
-    <S.HeaderContainer>
-      <S.Layout>
-        <Link to="/">
-          <img src={Logo} alt="logo" width="120px" height="36px" draggable={false} />
+    <header className="box-content flex bg-white mx-8">
+      <div className="min-w-[1024px] ml-auto mr-auto flex items-center justify-between">
+        <Link className="no-underline	decoration-black active:no-underline active:decoration-black" href="/">
+          <Image
+            src="/icons/logo.svg"
+            alt="logo"
+            width={100}
+            height={100}
+            style={{ width: "80px", height: "80px" }}
+            draggable={false}
+            priority
+          />
         </Link>
-        <S.LinkButtonWrapper>
-          {auth?.userId && <Link to="/myForms">내 설문지</Link>}
-          <Link to="/forum">게시판</Link>
-          <a href="https://boostcamp-wm.notion.site/Web28-BoostForm-ebdeff01de9241c0a453742f42f1a633">프로젝트 소개</a>
+        <div className="flex items-center justify-end">
           {auth?.userId && (
-            <Button
-              type="button"
-              onClick={onClickLogout}
-              backgroundColor={theme.colors.white}
-              border={theme.colors.blue3}
-              color={theme.colors.blue3}
-              fontSize={theme.fontSize.sz14}
-              active={false}
-            >
+            <Link className="mr-12" href="/myForms">
+              내 설문지
+            </Link>
+          )}
+          <Link href="/forum" className="mr-12">
+            게시판
+          </Link>
+          {auth?.userId && (
+            <Button type="button" onClick={onClickLogout} className="bg-white text-blue3 text-sm border border-blue3">
               로그아웃
             </Button>
           )}
           {!auth?.userId && (
-            <Button
-              type="button"
-              onClick={onClickLogin}
-              backgroundColor={theme.colors.blue3}
-              border="none"
-              color={theme.colors.white}
-              fontSize={theme.fontSize.sz16}
-            >
+            <Button type="button" onClick={onClickLogin} className="bg-blue3 text-white text-base border-none">
               로그인
             </Button>
           )}
-        </S.LinkButtonWrapper>
-      </S.Layout>
-    </S.HeaderContainer>
+        </div>
+      </div>
+    </header>
   );
 }
 

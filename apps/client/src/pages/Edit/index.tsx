@@ -1,38 +1,43 @@
+"use client";
+
 /* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useReducer, useState } from "react";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from "react-beautiful-dnd";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-import formApi from "api/formApi";
-import FormLayout from "components/template/Layout";
-import IconDropdown from "components/common/Dropdown/IconDropdown";
-import Question from "components/Edit/QuestionEdit";
-import Icon from "components/common/Icon";
-import ToggleButton from "components/common/ToggleButton";
-import QuestionRead from "components/Edit/QuestionRead";
-import TextDropdown from "components/common/Dropdown/TextDropdown";
-import Skeleton from "components/common/Skeleton";
-import ShareFormModal from "components/Modal/ShareFormModal";
-import Button from "components/common/Button";
-import IconButton from "components/common/IconButton";
-import ErrorBoundary from "components/common/ErrorBoundary";
-import useModal from "hooks/useModal";
-import useLoadingDelay from "hooks/useLoadingDelay";
-import writeReducer from "reducer/formEdit";
-import { CATEGORY_LIST, INITIAL_FORM, QUESTION_TYPE_LIST } from "store/form";
-import theme from "styles/theme";
-import { FormDataApi, QuestionType } from "types/form";
-import { fromApiToForm, fromFormToApi } from "utils/form";
-import * as S from "./style";
+import formApi from "@/api/formApi";
+import FormLayout from "@/components/template/Layout";
+import IconDropdown from "@/components/common/Dropdown/IconDropdown";
+import Question from "@/components/Edit/QuestionEdit";
+import ToggleButton from "@/components/common/ToggleButton";
+import QuestionRead from "@/components/Edit/QuestionRead";
+import TextDropdown from "@/components/common/Dropdown/TextDropdown";
+import Skeleton from "@/components/common/Skeleton";
+import ShareFormModal from "@/components/Modal/ShareFormModal";
+import Button from "@/components/common/Button";
+import IconButton from "@/components/common/IconButton";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+import useModal from "@/hooks/useModal";
+import useLoadingDelay from "@/hooks/useLoadingDelay";
+import writeReducer from "@/reducer/formEdit";
+import { CATEGORY_LIST, INITIAL_FORM, QUESTION_TYPE_LIST } from "@/store/form";
+import { FormDataApi, QuestionType } from "@/types/form";
+import { fromApiToForm, fromFormToApi } from "@/utils/form";
+
+import DragIndicator from "@public/icons/dragIndicator.svg";
+import Add from "@public/icons/add.svg";
+import Copy from "@public/icons/copy.svg";
+import Trashcan from "@public/icons/trashcan.svg";
+
+import { useParams } from "next/navigation";
+import "react-toastify/dist/ReactToastify.min.css";
 
 function Edit() {
   const { id } = useParams();
 
-  const fetchForm = (): Promise<FormDataApi> => formApi.getForm(id);
+  const fetchForm = (): Promise<FormDataApi> => formApi.getForm(id as string);
   const { data, isSuccess, isLoading, isError } = useQuery({
     queryKey: [id],
     queryFn: fetchForm,
@@ -146,7 +151,7 @@ function Edit() {
   };
 
   const onClickCopyLink = () => {
-    window.navigator.clipboard.writeText(`${process.env.REACT_APP_CLIENT_ORIGIN_URL}/forms/${id}/view`);
+    window.navigator.clipboard.writeText(`${"127.0.0.1:3000"}/forms/${id}/view`);
     toast.success("링크가 복사되었습니다!", {
       position: "top-right",
       autoClose: 2000,
@@ -188,7 +193,7 @@ function Edit() {
       return;
     }
     const apiData = fromFormToApi(state);
-    formApi.saveForm(id, apiData);
+    formApi.saveForm(id as string, apiData);
     toast.success("저장이 완료되었습니다.!", {
       position: "top-right",
       autoClose: 2000,
@@ -236,48 +241,57 @@ function Edit() {
   return (
     <ErrorBoundary>
       <FormLayout backgroundColor="blue">
-        <S.Container>
+        <div className="w-[760px]">
           {checkApiLoadingOrError() ? (
             <>
-              <S.TitleContainer>
+              <div className="mt-9 bg-white rounded p-5">
                 <Skeleton.Element type="formTitle" />
                 <Skeleton.Element type="text" />
                 <Skeleton.Element type="text" />
-              </S.TitleContainer>
+              </div>
               {Array.from({ length: 2 }, (_, index) => index).map((value) => (
-                <S.QuestionContainer key={value}>
+                <div
+                  className="mt-4 bg-white rounded border border-grey3 relative overflow-hidden pt-0 pb-5 px-5"
+                  key={value}
+                >
                   <Skeleton.Element type="formQuestionTitleEdit" />
                   <Skeleton.Element type="text" />
                   <Skeleton.Element type="text" />
                   <Skeleton.Element type="text" />
                   <Skeleton.Element type="text" />
                   <Skeleton.Shimmer />
-                </S.QuestionContainer>
+                </div>
               ))}
-              <S.BottomContainer>
+              <div className="flex justify-end mt-4 mb-0 bg-white rounded p-5 relative overflow-hidden">
                 <Skeleton.Element type="button" />
                 <Skeleton.Shimmer />
-              </S.BottomContainer>
+              </div>
             </>
           ) : null}
           {checkApiSuccess() ? (
             <>
-              <S.TitleContainer onClick={() => onClickTitle()}>
-                <S.TitleInput onInput={onInputTitle} value={form.title} placeholder="제목을 작성해주세요" />
-                <S.DescriptionInput
+              <div className="mt-9 bg-white rounded p-5" onClick={() => onClickTitle()}>
+                <input
+                  className="w-full block text-2xl py-1 px-0 border-b border-b-grey3 leading-9 focus:outline-none focus:border-b focus:border-b-black" // font-family: Arial, Helvetica, sans-serif
+                  onInput={onInputTitle}
+                  value={form.title}
+                  placeholder="제목을 작성해주세요"
+                />
+                <input
+                  className="w-full mt-2 mb-4 block text-base py-1 px-0 border-b border-grey3 leading-7 focus:outline-none focus:border-b focus:border-black" // font-family: Arial, Helvetica, sans-serif
                   onInput={onInputDescription}
                   value={form.description}
                   placeholder="설문지에 대한 간단한 설명을 작성해주세요"
                 />
                 <TextDropdown state={form.category} defaultState="카테고리">
-                  <TextDropdown.Head />
+                  <TextDropdown.Head className="border border-grey3 p-2 text-black text-sm" />
                   <TextDropdown.ItemList>
                     {CATEGORY_LIST.map((value) => (
                       <TextDropdown.Item key={value} value={value} onClick={() => onClickSelectCategory(value)} />
                     ))}
                   </TextDropdown.ItemList>
                 </TextDropdown>
-              </S.TitleContainer>
+              </div>
               <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
                 <Droppable droppableId="formQuestions">
                   {(droppable) => (
@@ -296,21 +310,25 @@ function Edit() {
                             }
 
                             return (
-                              <S.QuestionContainer
+                              <div
+                                className="mt-4 bg-white rounded pt-0 pb-5 px-5 border border-grey3 relative overflow-hidden"
                                 onClick={() => onClickQuestion(questionIndex)}
                                 onMouseOver={() => onMouseOverQuestion(questionIndex)}
                                 onMouseOut={() => onMouseOutQuestion()}
                                 {...draggable.draggableProps}
                                 ref={draggable.innerRef}
                               >
-                                <S.DragIndicator {...draggable.dragHandleProps}>
-                                  {showDragIndicator(questionIndex) ? <Icon type="dragIndicator" size="16px" /> : null}
-                                </S.DragIndicator>
+                                <div className="h-[30px] flex justify-center py-1 px-0" {...draggable.dragHandleProps}>
+                                  {showDragIndicator(questionIndex) ? <DragIndicator height="16" width="16" /> : null}
+                                </div>
                                 {focus === `q${questionIndex}` && (
                                   <>
-                                    <S.QuestionHead>
-                                      <S.QuestionTitleInput
-                                        onInput={(e) => onInputQuestionTitle(e.currentTarget.value, questionIndex)}
+                                    <div className="flex justify-between">
+                                      <input
+                                        className="block w-3/5 text-base py-2 px-3 border-b border-b-grey3 bg-grey1 rounded focus:outline-none focus:border-b focus:border-b-black leading-7" //   font-family: Arial, Helvetica, sans-serif;
+                                        onInput={(e: React.FormEvent<HTMLInputElement>) =>
+                                          onInputQuestionTitle(e.currentTarget.value, questionIndex)
+                                        }
                                         value={question[questionIndex].title}
                                         placeholder="질문"
                                       />
@@ -326,8 +344,8 @@ function Edit() {
                                         items={QUESTION_TYPE_LIST}
                                         defaultValue="선택해주세요"
                                       />
-                                    </S.QuestionHead>
-                                    <S.QuestionBody>
+                                    </div>
+                                    <div className="py-2 px-0">
                                       <Question
                                         index={questionIndex}
                                         questionState={question[questionIndex]}
@@ -335,38 +353,38 @@ function Edit() {
                                         modifyChoice={onInputModifyQuestionChoice}
                                         deleteChoice={onClickDeleteQuestionChoice}
                                       />
-                                    </S.QuestionBody>
-                                    <S.HorizontalRule />
-                                    <S.QuestionTail>
+                                    </div>
+                                    <hr className="h-[1px] border-0 bg-grey2" />
+                                    <div className="flex items-center justify-end mt-4">
                                       <IconButton
                                         type="button"
                                         onClick={() => onClickAddQuestion(questionIndex)}
-                                        icon="add"
-                                        size="21px"
-                                        style={{ marginRight: "12px" }}
-                                      />
+                                        className="mr-3"
+                                      >
+                                        <Add height="21" width="21" viewBox="0 0 24 24" />
+                                      </IconButton>
                                       <IconButton
                                         type="button"
                                         onClick={() => onClickCopyQuestion(questionIndex)}
-                                        icon="copy"
-                                        size="18px"
-                                        style={{ marginRight: "12px" }}
-                                      />
+                                        className="mr-3"
+                                      >
+                                        <Copy height="18" width="18" viewBox="0 0 24 24" />
+                                      </IconButton>
                                       <IconButton
                                         type="button"
                                         onClick={() => onClickDeleteQuestion(questionIndex)}
-                                        icon="trashcan"
-                                        size="18px"
-                                        style={{ marginRight: "12px" }}
-                                      />
-                                      <S.EssentialWrapper>
-                                        <S.EssentialText>필수</S.EssentialText>
+                                        className="mr-3"
+                                      >
+                                        <Trashcan width="18" height="18" viewBox="0 0 24 24" />
+                                      </IconButton>
+                                      <div className="flex items-center border-l border-l-grey3 py-2 px-3">
+                                        <span className="text-base mr-2">필수</span>
                                         <ToggleButton
                                           state={essential}
                                           onClick={() => onClickChangeQuestionEssential(questionIndex)}
                                         />
-                                      </S.EssentialWrapper>
-                                    </S.QuestionTail>
+                                      </div>
+                                    </div>
                                   </>
                                 )}
                                 {focus !== `q${questionIndex}` && (
@@ -375,7 +393,7 @@ function Edit() {
                                     <QuestionRead questionState={question[questionIndex]} />
                                   </>
                                 )}
-                              </S.QuestionContainer>
+                              </div>
                             );
                           }}
                         </Draggable>
@@ -385,20 +403,14 @@ function Edit() {
                   )}
                 </Droppable>
               </DragDropContext>
-              <S.BottomContainer>
-                <Button
-                  type="button"
-                  onClick={() => openModal()}
-                  backgroundColor={theme.colors.blue5}
-                  border={theme.colors.grey3}
-                  color={theme.colors.white}
-                >
+              <div className="flex justify-end mt-4 mb-8 mx-0 bg-white rounded p-5 relative overflow-hidden">
+                <Button type="button" onClick={() => openModal()} className="bg-blue5 border bordery-grey3 text-white">
                   저장
                 </Button>
-              </S.BottomContainer>
+              </div>
             </>
           ) : null}
-        </S.Container>
+        </div>
 
         <ModalPortal>
           <ShareFormModal

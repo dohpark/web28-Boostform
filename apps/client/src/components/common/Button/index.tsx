@@ -1,44 +1,15 @@
 import React from "react";
-import theme from "styles/theme";
-import ButtonComponent from "./style";
 import { ButtonProps } from "./type";
 
-function Button({
-  children,
-  type,
-  backgroundColor,
-  border,
-  fontSize,
-  color,
-  hover,
-  active,
-  onClick,
-  style,
-}: ButtonProps) {
+function Button({ children, type, onClick, className: customCss }: ButtonProps) {
+  const defaultCss = "flex items-center font-normal px-4 py-2 rounded cursor-pointer ";
+  const className = defaultCss + customCss;
+
   return (
-    <ButtonComponent
-      type={type}
-      backgroundColor={backgroundColor}
-      border={border}
-      fontSize={fontSize}
-      color={color}
-      hover={hover}
-      active={active}
-      onClick={onClick}
-      style={style}
-    >
+    <button className={className} type={type} onClick={onClick}>
       {children}
-    </ButtonComponent>
+    </button>
   );
 }
-
-Button.defaultProps = {
-  backgroundColor: "transparent",
-  border: "none",
-  fontSize: theme.fontSize.sz14,
-  color: theme.colors.black,
-  hover: "",
-  active: false,
-};
 
 export default Button;

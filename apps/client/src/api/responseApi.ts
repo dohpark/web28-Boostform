@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ResponseElement } from "types/response";
+import { ResponseElement } from "@/types/response";
 import API from "./routes";
 
 const responseApi = {

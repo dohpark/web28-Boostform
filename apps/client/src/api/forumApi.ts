@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Forum } from "types/forum";
+import { Forum } from "@/types/forum";
 import API from "./routes";
 
 const forumApi = {

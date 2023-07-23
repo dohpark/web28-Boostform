@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import Icon from "components/common/Icon";
-import OutsideDetecter from "hooks/useOutsideDetecter";
-import * as S from "./style";
+import OutsideDetecter from "@/hooks/useOutsideDetecter";
 import { IconDropdownProps } from "./type";
+import Dropdown from "@public/icons/dropdown.svg";
 
 function IconDropdown({ state, setState, items, defaultValue }: IconDropdownProps) {
   const findIcon = (str: string) => {
@@ -22,27 +21,29 @@ function IconDropdown({ state, setState, items, defaultValue }: IconDropdownProp
   const [selectedText, setSelectedText] = useState<string | null>(findText(state) || defaultValue);
 
   return (
-    <S.Container>
-      <S.Button
+    <div className="relative w-[220px]">
+      <button
+        className="border flex p-2 items-center w-full h-full border-grey3 rounded bg-transparent cursor-pointer"
         type="button"
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.stopPropagation();
           setOpen((prev) => !prev);
         }}
       >
-        {selectedIcon ? <Icon type={selectedIcon} size="16px" /> : null}
-        <S.DropdownText>{selectedText}</S.DropdownText>
-        <Icon type="dropdown" size="16px" />
-      </S.Button>
+        {/* {selectedIcon ? <Icon type={selectedIcon} size="16px" /> : null} */}
+        <span className="w-full text-left ml-2 text-sm">{selectedText}</span>
+        <Dropdown width="16" height="16" />
+      </button>
 
       {open && (
         <OutsideDetecter callback={() => setOpen(false)}>
-          <S.Content>
+          <ul className="w-full absolute z-10 bg-white py-2 px-0 rounded border border-grey3">
             {items.map(({ value, icon, text }) => (
-              <li key={value}>
-                <S.DropdownButton
+              <li key={value} className="text-left hover:bg-grey1">
+                <button
+                  className="flex item p-2 w-full border-0 bg-transparent cursor-pointer"
                   type="button"
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                     e.stopPropagation();
                     setSelectedIcon(findIcon(value));
                     setSelectedText(findText(value));
@@ -50,15 +51,15 @@ function IconDropdown({ state, setState, items, defaultValue }: IconDropdownProp
                     setState(value);
                   }}
                 >
-                  <Icon type={icon} size="16px" />
-                  <S.DropdownText>{text}</S.DropdownText>
-                </S.DropdownButton>
+                  {/* <Icon type={icon} size="16px" /> */}
+                  <span className="w-full text-left ml-2 text-sm">{text}</span>
+                </button>
               </li>
             ))}
-          </S.Content>
+          </ul>
         </OutsideDetecter>
       )}
-    </S.Container>
+    </div>
   );
 }
 

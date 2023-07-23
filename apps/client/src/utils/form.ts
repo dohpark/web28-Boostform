@@ -1,4 +1,4 @@
-import { FormState, QuestionState, FormDataApi } from "types/form";
+import { FormState, QuestionState, FormDataApi } from "@/types/form";
 
 const fromApiToForm = (api: FormDataApi, pageType: string): FormState => {
   const {

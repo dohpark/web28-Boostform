@@ -1,78 +1,66 @@
 import React, { useContext, useMemo, useState } from "react";
-import Icon from "components/common/Icon";
-import OutsideDetecter from "hooks/useOutsideDetecter";
-import theme from "styles/theme";
-import TextDropdownContext from "contexts/textDropdownContext";
+import OutsideDetecter from "@/hooks/useOutsideDetecter";
+import TextDropdownContext from "@/contexts/textDropdownContext";
+import DropdownIcon from "@public/icons/dropdown.svg";
 import { DropdownProps, HeadProps, ItemProps, ItemListProps } from "./type";
-import * as S from "./style";
 
-function Dropdown({ children, state, defaultState, fontSize = "" }: DropdownProps) {
+function Dropdown({ children, state, defaultState }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string>(state || defaultState);
 
-  const DropdownContextValue = useMemo(
-    () => ({ open, setOpen, selected, setSelected, fontSize }),
-    [open, selected, fontSize]
-  );
+  const DropdownContextValue = useMemo(() => ({ open, setOpen, selected, setSelected }), [open, selected]);
 
   return (
     <TextDropdownContext.Provider value={DropdownContextValue}>
-      <S.Container>{children}</S.Container>
+      <div className="relative w-[150px]">{children}</div>
     </TextDropdownContext.Provider>
   );
 }
 
-Dropdown.defaultProps = {
-  fontSize: "",
-};
-
-function Head({ border = theme.colors.grey3, padding = "10px", color = theme.colors.black, bold = false }: HeadProps) {
-  const { setOpen, selected, fontSize } = useContext(TextDropdownContext);
+function Head({ className: customCss }: HeadProps) {
+  const { setOpen, selected } = useContext(TextDropdownContext);
+  const defaultCss = "flex items-center w-full rounded-sm bg-transparent cursor-pointer";
+  const className = `${defaultCss} ${customCss}`;
 
   return (
-    <S.Button
-      border={border}
-      padding={padding}
+    <button
+      className={className}
       type="button"
-      fontSize={fontSize}
-      color={color}
-      bold={bold}
       onClick={(e) => {
         e.stopPropagation();
         if (setOpen) setOpen((prev) => !prev);
       }}
     >
-      <S.DropdownText>{selected}</S.DropdownText>
-      <Icon type="dropdown" size="16px" />
-    </S.Button>
+      <span className="w-full text-left ml-2">{selected}</span>
+      <DropdownIcon height="16" width="16" />
+    </button>
   );
 }
 
-Head.defaultProps = {
-  border: theme.colors.grey3,
-  padding: "10px",
-  color: theme.colors.black,
-  bold: false,
-};
-
-function ItemList({ children, style }: ItemListProps) {
+function ItemList({ children, className: customCss }: ItemListProps) {
   const { open, setOpen } = useContext(TextDropdownContext);
+
+  const defaultCss = "w-full absolute z-10 py-2 rounded-sm bg-white border border-grey3";
+  const className = `${defaultCss} ${customCss}`;
 
   return open ? (
     <OutsideDetecter callback={() => setOpen && setOpen(false)}>
-      <S.Content style={style}>{children}</S.Content>
+      <ul className={className}>{children}</ul>
     </OutsideDetecter>
   ) : null;
 }
 
-function Item({ value, onClick }: ItemProps) {
-  const { setSelected, setOpen, fontSize } = useContext(TextDropdownContext);
+function Item({ value, onClick, className: customCss }: ItemProps) {
+  const { setSelected, setOpen } = useContext(TextDropdownContext);
+
+  const defaultCss = "flex items-center p-2 w-full border-none bg-transparent cursor-pointer";
+  const className = `${defaultCss} ${customCss}`;
 
   return (
-    <li>
-      <S.DropdownButton
+    <li className="text-left hover:bg-grey1 text-sm">
+      <button
+        className={className}
         type="button"
-        fontSize={fontSize}
         onClick={(e) => {
           e.stopPropagation();
           if (setSelected) setSelected(value);
@@ -80,8 +68,8 @@ function Item({ value, onClick }: ItemProps) {
           onClick();
         }}
       >
-        <S.DropdownText>{value}</S.DropdownText>
-      </S.DropdownButton>
+        <span className="w-full text-left ml-2">{value}</span>
+      </button>
     </li>
   );
 }

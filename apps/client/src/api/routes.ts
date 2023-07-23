@@ -1,5 +1,4 @@
-const BASE_URL = process.env.REACT_APP_SERVER_ORIGIN_URL;
-
+const BASE_URL = "http://127.0.0.1:8080";
 const API = {
   FORM: `${BASE_URL}/api/forms`,
   RESPONSE: `${BASE_URL}/api/responses`,

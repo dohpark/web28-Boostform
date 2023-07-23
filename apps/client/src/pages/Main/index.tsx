@@ -1,41 +1,46 @@
+"use client";
+
 import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import Example from "assets/Images/Example.png";
-import { AuthContext } from "contexts/authProvider";
-import FormLayout from "components/template/Layout";
-import Button from "components/common/Button";
-import theme from "styles/theme";
-import * as S from "./style";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/contexts/authProvider";
+import FormLayout from "@/components/template/Layout";
+import Button from "@/components/common/Button";
 
 function Main() {
   const { auth } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleClick = () => {
     const path = auth?.userId ? "/myForms" : "/login";
-    navigate(path);
+    router.push(path);
   };
 
   return (
     <FormLayout backgroundColor="white">
-      <S.Container>
-        <S.TextContainer>
-          <S.H1>Boost Forms로 설문조사를 빠르게 작성하세요!</S.H1>
-          <S.Text>온라인 양식과 설문조사를 손쉽게 만들고 공유할 수 있습니다.</S.Text>
-          <Button
-            type="button"
-            onClick={() => handleClick()}
-            backgroundColor={theme.colors.blue3}
-            color={theme.colors.white}
-            fontSize={theme.fontSize.sz16}
-          >
+      <section className="flex justify-between mt-16 min-w-[1024px]">
+        <div className="w-[512px] ml-auto">
+          <h1 className="text-6xl mr-auto max-w-xl select-none leading-normal">
+            Boost Forms로 설문조사를 빠르게 작성하세요!
+          </h1>
+          <p className="mt-9 mb-6 text-xl select-none leading-7">
+            온라인 양식과 설문조사를 손쉽게 만들고 공유할 수 있습니다.
+          </p>
+          <Button type="button" onClick={() => handleClick()} className="bg-blue3 text-white text-base">
             시작하기
           </Button>
-        </S.TextContainer>
-        <S.ImageContainer>
-          <S.Image src={Example} alt="example" draggable={false} />
-        </S.ImageContainer>
-      </S.Container>
+        </div>
+        <div className="relative w-[512px] ml-9 select-none">
+          <Image
+            src="/images/Example.png"
+            alt="example"
+            width="675"
+            height="949"
+            className="w-full min-w-[400px] max-w-[600px]"
+            draggable={false}
+          />
+        </div>
+      </section>
     </FormLayout>
   );
 }

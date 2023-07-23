@@ -1,5 +1,5 @@
-import { QuestionState } from "types/form";
-import { ResponseElement, Validation } from "types/response";
+import { QuestionState } from "@/types/form";
+import { ResponseElement, Validation } from "@/types/response";
 
 interface QuestionViewProps {
   questionState: QuestionState;
