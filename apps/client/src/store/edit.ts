@@ -102,6 +102,7 @@ const useFormStore = create(
           const optionLength = question[questionIndex].option.length;
           const { currentChoiceId } = question[questionIndex];
 
+          question[questionIndex].currentChoiceId = currentChoiceId + 1;
           question[questionIndex].option.push({ choiceId: currentChoiceId + 1, value: `옵션${optionLength + 1}` });
         }),
       changeQuestionOption: (questionIndex: number, optionIndex: number, value: string) =>
