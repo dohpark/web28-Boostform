@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import OutsideDetecter from "@/hooks/useOutsideDetecter";
 import TextDropdownContext from "@/contexts/textDropdownContext";
 import DropdownIcon from "@public/icons/dropdown.svg";
@@ -7,6 +7,10 @@ import { DropdownProps, HeadProps, ItemProps, ItemListProps } from "./type";
 function Dropdown({ children, state, defaultState }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string>(state || defaultState);
+
+  useEffect(() => {
+    setSelected(state);
+  }, [state]);
 
   const DropdownContextValue = useMemo(() => ({ open, setOpen, selected, setSelected }), [open, selected]);
 
