@@ -9,7 +9,7 @@ function Dropdown({ children, state, defaultState }: DropdownProps) {
   const [selected, setSelected] = useState<string>(state || defaultState);
 
   useEffect(() => {
-    setSelected(state);
+    setSelected(state || defaultState);
   }, [state]);
 
   const DropdownContextValue = useMemo(() => ({ open, setOpen, selected, setSelected }), [open, selected]);
