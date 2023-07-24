@@ -1,7 +1,28 @@
 import TextDropdown from "@/components/common/Dropdown/TextDropdown";
+import { useEditStore, useFormStore } from "@/store/edit";
 import { CATEGORY_LIST } from "@/store/form";
+import { ForumCategory } from "@/types/forum";
 
 function Head() {
+  const { actions: editStateActions } = useEditStore();
+  const { form, actions: formActions } = useFormStore();
+
+  const onClickTitle = () => {
+    editStateActions.setFocus("title");
+  };
+
+  const onClickSelectCategory = (value: ForumCategory) => {
+    formActions.selectCategory(value);
+  };
+
+  const onInputTitle: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    formActions.changeTitle(e.target.value);
+  };
+
+  const onInputDescription: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    formActions.changeDescription(e.target.value);
+  };
+
   return (
     <div className="mt-9 bg-white rounded p-5" onClick={() => onClickTitle()}>
       <input
