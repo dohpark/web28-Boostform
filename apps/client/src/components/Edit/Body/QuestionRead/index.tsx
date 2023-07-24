@@ -1,13 +1,15 @@
 import React from "react";
-import { QuestionState } from "@/types/form";
 import Objective from "./Objective";
 import Subjective from "./Subjective";
+import { useFormStore } from "@/store/edit";
 
-function QuestionRead({ questionState }: { questionState: QuestionState }) {
-  const { type } = questionState;
+function QuestionRead({ index }: { index: number }) {
+  const { question } = useFormStore();
+
+  const { type } = question[index];
   return (
     <>
-      {(type === "checkbox" || type === "multiple") && <Objective questionState={questionState} />}
+      {(type === "checkbox" || type === "multiple") && <Objective index={index} />}
 
       {type === "paragraph" && <Subjective />}
     </>

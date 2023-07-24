@@ -38,18 +38,6 @@ function Body() {
     formActions.changeQuestionType(value, questionIndex);
   };
 
-  const onClickAddQuestionOption = (questionIndex: number) => {
-    formActions.addQuestionOption(questionIndex);
-  };
-
-  const onInputChangeQuestionOption = (questionIndex: number, optionIndex: number, value: string) => {
-    formActions.changeQuestionOption(questionIndex, optionIndex, value);
-  };
-
-  const onClickDeleteQuestionOption = (questionIndex: number, optionIndex: number) => {
-    formActions.deleteQuestionOption(questionIndex, optionIndex);
-  };
-
   const onClickCopyQuestion = (questionIndex: number) => {
     formActions.copyQuestion(questionIndex);
   };
@@ -157,13 +145,7 @@ function Body() {
                             />
                           </div>
                           <div className="py-2 px-0">
-                            <Question
-                              index={questionIndex}
-                              questionState={question[questionIndex]}
-                              addQuestionChoice={onClickAddQuestionOption}
-                              modifyChoice={onInputChangeQuestionOption}
-                              deleteChoice={onClickDeleteQuestionOption}
-                            />
+                            <Question index={questionIndex} />
                           </div>
                           <hr className="h-[1px] border-0 bg-grey2" />
                           <div className="flex items-center justify-end mt-4">
@@ -201,7 +183,7 @@ function Body() {
                       {focus !== `q${questionIndex}` && (
                         <>
                           <div>{title}</div>
-                          <QuestionRead questionState={question[questionIndex]} />
+                          <QuestionRead index={questionIndex} />
                         </>
                       )}
                     </div>

@@ -2,20 +2,15 @@ import React from "react";
 import Objective from "./Objective";
 import Subjective from "./Subjective";
 import QuestionProps from "./type";
+import { useFormStore } from "@/store/edit";
 
-function Question({ index, questionState, addQuestionChoice, modifyChoice, deleteChoice }: QuestionProps) {
-  const { type } = questionState;
+function Question({ index }: QuestionProps) {
+  const { question } = useFormStore();
+
+  const { type } = question[index];
   return (
     <>
-      {(type === "checkbox" || type === "multiple") && (
-        <Objective
-          questionState={questionState}
-          addQuestionChoice={addQuestionChoice}
-          modifyChoice={modifyChoice}
-          deleteChoice={deleteChoice}
-          index={index}
-        />
-      )}
+      {(type === "checkbox" || type === "multiple") && <Objective index={index} />}
 
       {type === "paragraph" && <Subjective />}
     </>
