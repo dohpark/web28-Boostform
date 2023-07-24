@@ -1,4 +1,5 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from "react-beautiful-dnd";
+import { toast } from "react-toastify";
 
 import IconDropdown from "@/components/common/Dropdown/IconDropdown";
 import Question from "@/components/Edit/QuestionEdit";
@@ -6,13 +7,102 @@ import ToggleButton from "@/components/common/ToggleButton";
 import QuestionRead from "@/components/Edit/QuestionRead";
 import IconButton from "@/components/common/IconButton";
 import { QUESTION_TYPE_LIST } from "@/store/form";
+import { useEditStore, useFormStore } from "@/store/edit";
 
 import DragIndicator from "@public/icons/dragIndicator.svg";
 import Add from "@public/icons/add.svg";
 import Copy from "@public/icons/copy.svg";
 import Trashcan from "@public/icons/trashcan.svg";
+import { QuestionType } from "@/types/form";
 
 function Body() {
+  const { focus, drag, hover, actions: editStateActions } = useEditStore();
+  const { question, actions: formActions } = useFormStore();
+
+  const onClickQuestion = (index: number) => {
+    editStateActions.setFocus(`q${index}`);
+  };
+
+  const onMouseOverQuestion = (index: number) => {
+    editStateActions.setHover(`q${index}`);
+  };
+  const onMouseOutQuestion = () => {
+    editStateActions.setHover("");
+  };
+
+  const onInputQuestionTitle = (value: string, questionIndex: number) => {
+    formActions.changeQuestionTitle(value, questionIndex);
+  };
+
+  const onClickSetQuestionType = (value: QuestionType, questionIndex: number) => {
+    formActions.changeQuestionType(value, questionIndex);
+  };
+
+  const onClickAddQuestionOption = (questionIndex: number) => {
+    formActions.addQuestionOption(questionIndex);
+  };
+
+  const onInputChangeQuestionOption = (questionIndex: number, optionIndex: number, value: string) => {
+    formActions.changeQuestionOption(questionIndex, optionIndex, value);
+  };
+
+  const onClickDeleteQuestionOption = (questionIndex: number, optionIndex: number) => {
+    formActions.deleteQuestionOption(questionIndex, optionIndex);
+  };
+
+  const onClickCopyQuestion = (questionIndex: number) => {
+    formActions.copyQuestion(questionIndex);
+  };
+
+  const onClickAddQuestion = (questionIndex: number) => {
+    formActions.addQuestion(questionIndex);
+  };
+
+  const onClickDeleteQuestion = (questionIndex: number) => {
+    if (question.length === 1) {
+      toast.error("삭제가 불가능합니다!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+    formActions.deleteQuestion(questionIndex);
+  };
+
+  const onClickChangeQuestionEssential = (questionIndex: number) => {
+    formActions.changeQuestionEssential(questionIndex);
+  };
+
+  const onDragStart = (initial: DragStart) => {
+    const { source } = initial;
+    editStateActions.setDrag(`q${source.index}`);
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    editStateActions.setDrag("");
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+
+    formActions.changeQuestionOrder(source.index, destination.index);
+
+    editStateActions.setFocus(`q${destination.index}`);
+  };
+
+  const showDragIndicator = (index: number) => {
+    if (focus === `q${index}`) return true;
+    if (drag === `q${index}`) return true;
+    if (drag && drag !== hover) return false;
+    if (hover === `q${index}`) return true;
+    return false;
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <Droppable droppableId="formQuestions">
@@ -70,9 +160,9 @@ function Body() {
                             <Question
                               index={questionIndex}
                               questionState={question[questionIndex]}
-                              addQuestionChoice={onClickAddQuestionChoice}
-                              modifyChoice={onInputModifyQuestionChoice}
-                              deleteChoice={onClickDeleteQuestionChoice}
+                              addQuestionChoice={onClickAddQuestionOption}
+                              modifyChoice={onInputChangeQuestionOption}
+                              deleteChoice={onClickDeleteQuestionOption}
                             />
                           </div>
                           <hr className="h-[1px] border-0 bg-grey2" />
