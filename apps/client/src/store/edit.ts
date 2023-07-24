@@ -146,6 +146,7 @@ const useFormStore = create(
               },
             ],
           };
+          form.currentQuestionId = currentQuestionId + 1;
           question.splice(questionIndex + 1, 0, newQuestion);
         }),
       changeQuestionEssential: (questionIndex: number) =>
