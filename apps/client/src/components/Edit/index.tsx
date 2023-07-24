@@ -12,7 +12,7 @@ import { fromApiToForm } from "@/utils/form";
 import Head from "@/components/Edit/Head";
 import Submit from "@/components/Edit/Submit";
 import Body from "@/components/Edit/Body";
-import ShareFormModal from "@/components/Modal/ShareFormModal";
+import ShareFormModal from "@/components/Edit/ShareFormModal";
 import { useFormStore } from "@/store/edit";
 import "react-toastify/dist/ReactToastify.min.css";
 

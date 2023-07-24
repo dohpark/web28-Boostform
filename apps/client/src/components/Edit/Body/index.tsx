@@ -2,9 +2,9 @@ import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from "re
 import { toast } from "react-toastify";
 
 import IconDropdown from "@/components/common/Dropdown/IconDropdown";
-import Question from "@/components/Edit/QuestionEdit";
+import Question from "@/components/Edit/Body/QuestionEdit";
 import ToggleButton from "@/components/common/ToggleButton";
-import QuestionRead from "@/components/Edit/QuestionRead";
+import QuestionRead from "@/components/Edit/Body/QuestionRead";
 import IconButton from "@/components/common/IconButton";
 import { QUESTION_TYPE_LIST } from "@/store/form";
 import { useEditStore, useFormStore } from "@/store/edit";
