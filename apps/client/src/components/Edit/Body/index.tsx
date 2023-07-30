@@ -98,6 +98,7 @@ function Body() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [originalMouseY, setOriginalMouseY] = useState(0);
   const [destinationMouseY, setDestinationMouseY] = useState(0);
+  const [scrollMovingY, setScrollMovingY] = useState(0);
   const [direction, setDirection] = useState<"up" | "down">("up");
   const [destination, setDestination] = useState<number | null>(null);
 
@@ -193,7 +194,7 @@ function Body() {
 
         if (direction === "down") {
           if (selectedItemBottom < node.getBoundingClientRect().top + node.clientHeight / 2) {
-            node.classList.add("transition-transform");
+            node.classList.add("transition-drag");
             node.style.transform = `translate(0px, ${transformY}px)`;
           } else {
             node.removeAttribute("style");
@@ -204,7 +205,7 @@ function Body() {
           if (selectedItemTop > node.getBoundingClientRect().top + node.clientHeight / 2) {
             node.removeAttribute("style");
           } else {
-            node.classList.add("transition-transform");
+            node.classList.add("transition-drag");
             node.style.transform = `translate(0px, ${transformY}px)`;
           }
         }
@@ -218,15 +219,15 @@ function Body() {
       );
       setDestination(destination);
     }
-  }, [destinationMouseY]);
+  }, [destinationMouseY, direction, scrollMovingY]);
 
   // mouse up logic
   useEffect(() => {
     if (isMouseDown) return;
     if (selectedIndex === null) return;
-    if (destination === null) {
-      if (!droppableRef.current) return;
+    if (!droppableRef.current) return;
 
+    if (destination === null) {
       // delete placeholder
       if (Array.from(droppableRef.current.children).includes(placeholder.current)) {
         droppableRef.current.removeChild(placeholder.current);
@@ -237,7 +238,7 @@ function Body() {
       // clean up
       draggableRef.current.forEach((node) => {
         node.removeAttribute("style");
-        node.classList.remove("transition-transform");
+        node.classList.remove("transition-drag");
         node.classList.remove("transition-drop");
       });
 
@@ -248,30 +249,29 @@ function Body() {
     }
 
     // destination으로 이동
-    const selectedItem = draggableRef.current[selectedIndex];
-    selectedItem.classList.add("transition-drop");
+    const currentSelectedItem = draggableRef.current[selectedIndex];
+    const snapshotSelectedItem = snapshotRef.current[selectedIndex];
 
-    if (selectedIndex === destination) {
-      selectedItem.style.transform = `translate(0px, 0px)`;
-    } else if (selectedIndex < destination) {
-      const transformY = snapshotRef.current
-        .filter((_, index) => selectedIndex < index && index <= destination)
-        .reduce((acc, snapshot) => {
-          return acc + snapshot.height + snapshot.marginTop;
-        }, 0);
+    currentSelectedItem.classList.add("transition-drop");
 
-      selectedItem.style.transform = `translate(0px, ${transformY}px)`;
+    const currentSelectedItemBoundingClientTop = currentSelectedItem.getBoundingClientRect().top;
+    const snapshotSelectedItemBoundingClientTop = snapshotSelectedItem.top;
+
+    const candidates = draggableRef.current.filter(
+      (node) => node.getBoundingClientRect().top < currentSelectedItemBoundingClientTop
+    );
+
+    if (candidates.length === 0) {
+      const parentBoundingClientRectTop = droppableRef.current.getBoundingClientRect().top;
+      const distance = parentBoundingClientRectTop - snapshotSelectedItemBoundingClientTop;
+
+      currentSelectedItem.style.transform = `translate(0px, ${distance}px)`;
     } else {
-      const transformY =
-        snapshotRef.current
-          .filter((_, index) => selectedIndex >= index && index >= destination)
-          .reduce((acc, snapshot) => {
-            return acc + snapshot.height + snapshot.marginTop + snapshot.marginBottom;
-          }, 0) -
-        snapshotRef.current[selectedIndex].height -
-        snapshotRef.current[selectedIndex].marginTop;
+      const closest = candidates[candidates.length - 1];
+      const target = closest.getBoundingClientRect().top + closest.offsetHeight + snapshotSelectedItem.marginTop;
+      const distance = target - snapshotSelectedItemBoundingClientTop;
 
-      selectedItem.style.transform = `translate(0px, ${-transformY}px)`;
+      currentSelectedItem.style.transform = `translate(0px, ${distance}px)`;
     }
 
     const timerId = setTimeout(() => {
@@ -291,7 +291,7 @@ function Body() {
       // clean up
       draggableRef.current.forEach((node) => {
         node.removeAttribute("style");
-        node.classList.remove("transition-transform");
+        node.classList.remove("transition-drag");
         node.classList.remove("transition-drop");
       });
 
@@ -306,7 +306,20 @@ function Body() {
 
   const handleMouseMove = (e: MouseEvent) => {
     setDestinationMouseY(e.clientY);
-    setDirection(e.movementY <= 0 ? "up" : "down");
+    if (e.movementY < 0) {
+      setDirection("up");
+    } else if (e.movementY > 0) {
+      setDirection("down");
+    }
+  };
+
+  const handleScroll = () => {
+    setScrollMovingY((prev) => {
+      if (prev < window.scrollY) setDirection("down");
+      else if (prev > window.scrollY) setDirection("up");
+
+      return window.scrollY;
+    });
   };
 
   const handleMouseUp = () => {
@@ -316,17 +329,20 @@ function Body() {
 
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
+    document.removeEventListener("scroll", handleScroll);
   };
 
   const handleMouseDown = (e: React.MouseEvent, index: number) => {
     setSelectedIndex(index);
     setIsMouseDown(true);
     setOriginalMouseY(e.clientY);
+    setDestinationMouseY(e.clientY);
 
     editStateActions.setDrag(`q${index}`);
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("scroll", handleScroll);
   };
 
   return (
