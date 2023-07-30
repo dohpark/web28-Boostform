@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.transition-drag {
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+.transition-drop {
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
