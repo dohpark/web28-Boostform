@@ -1,6 +1,11 @@
-import React from "react";
-import Edit from "@/pages/Edit";
+import React, { Suspense } from "react";
+import Loading from "./loading";
+import Edit from "@/components/Edit";
 
 export default function Page() {
-  return <Edit />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <Edit />
+    </Suspense>
+  );
 }

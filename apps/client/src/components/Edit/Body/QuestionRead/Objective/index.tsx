@@ -1,11 +1,12 @@
 import React from "react";
-import { QuestionState } from "@/types/form";
 import CheckboxEmpty from "@public/icons/checkboxEmpty.svg";
 import MultipleEmpty from "@public/icons/multipleEmpty.svg";
 import COLORS from "@/constants/color";
+import { useFormStore } from "@/store/edit";
 
-function Objective({ questionState }: { questionState: QuestionState }) {
-  const { option, type } = questionState;
+function Objective({ index }: { index: number }) {
+  const { question } = useFormStore();
+  const { option, type } = question[index];
 
   return (
     <div className="mt-5">

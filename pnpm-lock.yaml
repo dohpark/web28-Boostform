@@ -46,6 +46,9 @@ importers:
       eslint-config-airbnb:
         specifier: ^19.0.4
         version: 19.0.4(eslint-plugin-import@2.27.5)(eslint-plugin-jsx-a11y@6.7.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react@7.32.2)(eslint@8.27.0)
+      immer:
+        specifier: ^10.0.2
+        version: 10.0.2
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -55,9 +58,6 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
-      react-beautiful-dnd:
-        specifier: ^13.1.1
-        version: 13.1.1(react-dom@18.2.0)(react@18.2.0)
       react-chartjs-2:
         specifier: ^5.0.1
         version: 5.0.1(chart.js@4.0.1)(react@18.2.0)
@@ -76,6 +76,9 @@ importers:
       web-vitals:
         specifier: ^2.1.4
         version: 2.1.4
+      zustand:
+        specifier: ^4.3.9
+        version: 4.3.9(immer@10.0.2)(react@18.2.0)
     devDependencies:
       '@svgr/webpack':
         specifier: ^8.0.1
@@ -83,9 +86,6 @@ importers:
       '@types/lodash':
         specifier: ^4.14.189
         version: 4.14.189
-      '@types/react-beautiful-dnd':
-        specifier: ^13.1.2
-        version: 13.1.2
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.42.1
         version: 5.42.1(@typescript-eslint/parser@5.42.1)(eslint@8.27.0)(typescript@4.9.4)
@@ -8242,6 +8242,10 @@ packages:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
 
+  /immer@10.0.2:
+    resolution: {integrity: sha512-Rx3CqeqQ19sxUtYV9CU911Vhy8/721wRFnJv3REVGWUmoAcIwzifTsdmJte/MV+0/XpM35LZdQMBGkRIoLPwQA==}
+    dev: false
+
   /immer@9.0.21:
     resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
     dev: false
@@ -14292,4 +14296,21 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zustand@4.3.9(immer@10.0.2)(react@18.2.0):
+    resolution: {integrity: sha512-Tat5r8jOMG1Vcsj8uldMyqYKC5IZvQif8zetmLHs9WoZlntTHmIoNM8TpLRY31ExncuUvUOXehd0kvahkuHjDw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      immer: 10.0.2
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
