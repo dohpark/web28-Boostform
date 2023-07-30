@@ -94,17 +94,18 @@ function Body() {
   >([]);
 
   const placeholder = useRef(document.createElement("div"));
-
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [originalMouseY, setOriginalMouseY] = useState(0);
   const [destinationMouseY, setDestinationMouseY] = useState(0);
+  const [direction, setDirection] = useState<"up" | "down">("up");
   const [destination, setDestination] = useState<number | null>(null);
 
+  // mouse down logic
   useEffect(() => {
-    // mouse down logic
     if (!isMouseDown) return;
     if (!droppableRef.current) return;
+    if (selectedIndex === null) return;
 
     // capture
     draggableRef.current = Array.from(droppableRef.current.children) as HTMLDivElement[];
@@ -124,37 +125,50 @@ function Body() {
     // document style
     document.body.style.userSelect = "none";
     document.body.style.cursor = "grabbing";
-  }, [isMouseDown]);
 
-  useEffect(() => {
-    // mouse up logic
-    if (isMouseDown) return;
-    if (!droppableRef.current) return;
-    if (selectedIndex === null) return;
+    // animation init
+    const selectedItem = draggableRef.current[selectedIndex];
 
-    // delete placeholder
-    if (Array.from(droppableRef.current.children).includes(placeholder.current)) {
-      droppableRef.current.removeChild(placeholder.current);
-    }
+    const selectedItemBottom = selectedItem.getBoundingClientRect().bottom;
+    const transformY =
+      snapshotRef.current[selectedIndex].height +
+      snapshotRef.current[selectedIndex].marginTop +
+      snapshotRef.current[selectedIndex].marginBottom;
 
-    // form change
-    if (destination !== null) {
-      formActions.changeQuestionOrder(selectedIndex, destination);
-      editStateActions.setFocus(`q${destination}`);
-    }
-    setDestination(null);
+    draggableRef.current.forEach((node, index) => {
+      if (index === selectedIndex) return;
 
-    // clean up
-    draggableRef.current.forEach((node) => {
-      node.removeAttribute("style");
+      if (selectedItemBottom < node.getBoundingClientRect().top) {
+        node.style.transform = `translate(0px, ${transformY}px)`;
+      }
     });
 
-    // document style
-    document.body.removeAttribute("style");
-  }, [isMouseDown]);
+    // target style
+    selectedItem.style.position = "fixed";
+    selectedItem.style.width = snapshotRef.current[selectedIndex].width + "px";
+    selectedItem.style.height = snapshotRef.current[selectedIndex].height + "px";
 
+    selectedItem.style.top =
+      snapshotRef.current[selectedIndex].top - snapshotRef.current[selectedIndex].marginTop + "px";
+    selectedItem.style.left =
+      snapshotRef.current[selectedIndex].left - snapshotRef.current[selectedIndex].marginLeft + "px";
+    selectedItem.style.boxSizing = "border-box";
+    selectedItem.style.zIndex = "5000";
+    selectedItem.style.pointerEvents = "none";
+
+    // create placeholder
+    placeholder.current.style.height = snapshotRef.current[selectedIndex].height + "px";
+    placeholder.current.style.width = snapshotRef.current[selectedIndex].width + "px";
+    placeholder.current.style.marginTop = snapshotRef.current[selectedIndex].marginTop + "px";
+    placeholder.current.style.marginBottom = snapshotRef.current[selectedIndex].marginBottom + "px";
+    placeholder.current.style.marginLeft = snapshotRef.current[selectedIndex].marginLeft + "px";
+    placeholder.current.style.marginRight = snapshotRef.current[selectedIndex].marginRight + "px";
+
+    droppableRef.current.appendChild(placeholder.current);
+  }, [isMouseDown, selectedIndex]);
+
+  // mouse move logic
   useEffect(() => {
-    // mouse move logic
     if (!droppableRef.current) return;
     if (selectedIndex === null) return;
 
@@ -162,28 +176,7 @@ function Body() {
     if (isMouseDown) {
       const selectedItem = draggableRef.current[selectedIndex];
 
-      // create placeholder
-      placeholder.current.style.height = snapshotRef.current[selectedIndex].height + "px";
-      placeholder.current.style.width = snapshotRef.current[selectedIndex].width + "px";
-      placeholder.current.style.marginTop = snapshotRef.current[selectedIndex].marginTop + "px";
-      placeholder.current.style.marginBottom = snapshotRef.current[selectedIndex].marginBottom + "px";
-      placeholder.current.style.marginLeft = snapshotRef.current[selectedIndex].marginLeft + "px";
-      placeholder.current.style.marginRight = snapshotRef.current[selectedIndex].marginRight + "px";
-
-      droppableRef.current.appendChild(placeholder.current);
-
-      // target style & transform
-      selectedItem.style.position = "fixed";
-      selectedItem.style.width = snapshotRef.current[selectedIndex].width + "px";
-      selectedItem.style.height = snapshotRef.current[selectedIndex].height + "px";
-
-      selectedItem.style.top =
-        snapshotRef.current[selectedIndex].top - snapshotRef.current[selectedIndex].marginTop + "px";
-      selectedItem.style.left =
-        snapshotRef.current[selectedIndex].left - snapshotRef.current[selectedIndex].marginLeft + "px";
-      selectedItem.style.boxSizing = "border-box";
-      selectedItem.style.zIndex = "5000";
-      selectedItem.style.pointerEvents = "none";
+      // target transform
       selectedItem.style.transform = `translate(0px, ${destinationMouseY - originalMouseY}px)`;
 
       // collision detection
@@ -198,16 +191,22 @@ function Body() {
       draggableRef.current.forEach((node, index) => {
         if (index === selectedIndex) return;
 
-        if (selectedItemBottom < node.getBoundingClientRect().top + node.clientHeight / 2) {
-          node.style.transform = `translate(0px, ${transformY}px)`;
-        } else {
-          node.removeAttribute("style");
+        if (direction === "down") {
+          if (selectedItemBottom < node.getBoundingClientRect().top + node.clientHeight / 2) {
+            node.classList.add("transition-transform");
+            node.style.transform = `translate(0px, ${transformY}px)`;
+          } else {
+            node.removeAttribute("style");
+          }
         }
 
-        if (selectedItemTop > node.getBoundingClientRect().top + node.clientHeight / 2) {
-          node.removeAttribute("style");
-        } else {
-          node.style.transform = `translate(0px, ${transformY}px)`;
+        if (direction === "up") {
+          if (selectedItemTop > node.getBoundingClientRect().top + node.clientHeight / 2) {
+            node.removeAttribute("style");
+          } else {
+            node.classList.add("transition-transform");
+            node.style.transform = `translate(0px, ${transformY}px)`;
+          }
         }
       });
 
@@ -221,8 +220,93 @@ function Body() {
     }
   }, [destinationMouseY]);
 
+  // mouse up logic
+  useEffect(() => {
+    if (isMouseDown) return;
+    if (selectedIndex === null) return;
+    if (destination === null) {
+      if (!droppableRef.current) return;
+
+      // delete placeholder
+      if (Array.from(droppableRef.current.children).includes(placeholder.current)) {
+        droppableRef.current.removeChild(placeholder.current);
+      }
+
+      setDestination(null);
+
+      // clean up
+      draggableRef.current.forEach((node) => {
+        node.removeAttribute("style");
+        node.classList.remove("transition-transform");
+        node.classList.remove("transition-drop");
+      });
+
+      // document style
+      document.body.removeAttribute("style");
+
+      return;
+    }
+
+    // destination으로 이동
+    const selectedItem = draggableRef.current[selectedIndex];
+    selectedItem.classList.add("transition-drop");
+
+    if (selectedIndex === destination) {
+      selectedItem.style.transform = `translate(0px, 0px)`;
+    } else if (selectedIndex < destination) {
+      const transformY = snapshotRef.current
+        .filter((_, index) => selectedIndex < index && index <= destination)
+        .reduce((acc, snapshot) => {
+          return acc + snapshot.height + snapshot.marginTop;
+        }, 0);
+
+      selectedItem.style.transform = `translate(0px, ${transformY}px)`;
+    } else {
+      const transformY =
+        snapshotRef.current
+          .filter((_, index) => selectedIndex >= index && index >= destination)
+          .reduce((acc, snapshot) => {
+            return acc + snapshot.height + snapshot.marginTop + snapshot.marginBottom;
+          }, 0) -
+        snapshotRef.current[selectedIndex].height -
+        snapshotRef.current[selectedIndex].marginTop;
+
+      selectedItem.style.transform = `translate(0px, ${-transformY}px)`;
+    }
+
+    const timerId = setTimeout(() => {
+      if (!droppableRef.current) return;
+
+      // delete placeholder
+      if (Array.from(droppableRef.current.children).includes(placeholder.current)) {
+        droppableRef.current.removeChild(placeholder.current);
+      }
+
+      // form change
+      formActions.changeQuestionOrder(selectedIndex, destination);
+      editStateActions.setFocus(`q${destination}`);
+
+      setDestination(null);
+
+      // clean up
+      draggableRef.current.forEach((node) => {
+        node.removeAttribute("style");
+        node.classList.remove("transition-transform");
+        node.classList.remove("transition-drop");
+      });
+
+      // document style
+      document.body.removeAttribute("style");
+    }, 300);
+
+    return () => {
+      timerId && clearTimeout(timerId);
+    };
+  }, [isMouseDown]);
+
   const handleMouseMove = (e: MouseEvent) => {
     setDestinationMouseY(e.clientY);
+    setDirection(e.movementY <= 0 ? "up" : "down");
   };
 
   const handleMouseUp = () => {
