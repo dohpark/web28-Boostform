@@ -1,15 +1,15 @@
-import { IconType } from "components/common/Icon/type";
+import { IconType } from "@/types/icons";
 
 interface IconItem {
-  value: string;
-  icon: IconType;
+  value: IconType;
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
   text: string;
 }
 
 interface IconDropdownProps {
   defaultValue: string;
-  state: string;
-  setState: (value: string) => void;
+  state: IconType;
+  setState: (value: IconType) => void;
   items: IconItem[];
 }
 
