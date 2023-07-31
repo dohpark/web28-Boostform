@@ -14,6 +14,7 @@ import Copy from "@public/icons/copy.svg";
 import Trashcan from "@public/icons/trashcan.svg";
 import { QuestionType } from "@/types/form";
 import { useEffect, useRef, useState } from "react";
+import { IconType } from "@/types/icons";
 
 function Body() {
   const { focus, drag, hover, actions: editStateActions } = useEditStore();
@@ -377,11 +378,8 @@ function Body() {
                 />
                 <IconDropdown
                   state={type}
-                  setState={(questionType: string) => {
-                    const isQuestionType = (str: string): str is QuestionType =>
-                      str === "checkbox" || str === "multiple" || str === "paragraph";
-
-                    if (isQuestionType(questionType)) onClickSetQuestionType(questionType, questionIndex);
+                  setState={(questionType: IconType) => {
+                    onClickSetQuestionType(questionType, questionIndex);
                   }}
                   items={QUESTION_TYPE_LIST}
                   defaultValue="선택해주세요"
