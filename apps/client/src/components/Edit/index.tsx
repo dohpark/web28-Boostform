@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 import formApi from "@/api/formApi";
 import useModal from "@/hooks/useModal";
@@ -26,6 +26,7 @@ function Edit() {
     refetchOnWindowFocus: false,
     retry: 2,
     useErrorBoundary: true,
+    suspense: true,
   });
 
   const { actions: formActions } = useFormStore();
