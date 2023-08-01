@@ -4,7 +4,6 @@ import ModalPortalProps from "./type";
 
 const useModal = (option?: { setBackgroundClickClose: boolean }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const modalRoot = document.getElementById("modal-root") as HTMLElement;
   const [windowOffsetY, setWindowOffsetY] = useState(0);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const useModal = (option?: { setBackgroundClickClose: boolean }) => {
           {children}
           <div className="absolute w-full h-full bg-black bg-opacity-75" onClick={onClickBackgroundCloseModal} />
         </div>,
-        modalRoot
+        document.getElementById("modal-root") as HTMLElement
       );
     return null;
   }

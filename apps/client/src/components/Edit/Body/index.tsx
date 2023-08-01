@@ -94,7 +94,7 @@ function Body() {
     }[]
   >([]);
 
-  const placeholder = useRef(document.createElement("div"));
+  const placeholder = useRef<HTMLDivElement | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [originalMouseY, setOriginalMouseY] = useState(0);
@@ -103,11 +103,16 @@ function Body() {
   const [direction, setDirection] = useState<"up" | "down">("up");
   const [destination, setDestination] = useState<number | null>(null);
 
+  useEffect(() => {
+    placeholder.current = document.createElement("div");
+  }, []);
+
   // mouse down logic
   useEffect(() => {
     if (!isMouseDown) return;
     if (!droppableRef.current) return;
     if (selectedIndex === null) return;
+    if (!placeholder.current) return;
 
     // capture
     draggableRef.current = Array.from(droppableRef.current.children) as HTMLDivElement[];
@@ -173,6 +178,7 @@ function Body() {
   useEffect(() => {
     if (!droppableRef.current) return;
     if (selectedIndex === null) return;
+    if (!placeholder.current) return;
 
     // handleMouseDown
     if (isMouseDown) {
@@ -227,6 +233,7 @@ function Body() {
     if (isMouseDown) return;
     if (selectedIndex === null) return;
     if (!droppableRef.current) return;
+    if (!placeholder.current) return;
 
     if (destination === null) {
       // delete placeholder
@@ -277,6 +284,7 @@ function Body() {
 
     const timerId = setTimeout(() => {
       if (!droppableRef.current) return;
+      if (!placeholder.current) return;
 
       // delete placeholder
       if (Array.from(droppableRef.current.children).includes(placeholder.current)) {

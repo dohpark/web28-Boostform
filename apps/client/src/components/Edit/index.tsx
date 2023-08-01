@@ -16,7 +16,7 @@ import ShareFormModal from "@/components/Edit/ShareFormModal";
 import { useFormStore } from "@/store/edit";
 import "react-toastify/dist/ReactToastify.min.css";
 
-function Edit() {
+function Edit({ initialData }: { initialData: FormDataApi }) {
   const { id } = useParams();
 
   const fetchForm = (): Promise<FormDataApi> => formApi.getForm(id as string);
@@ -27,6 +27,7 @@ function Edit() {
     retry: 2,
     useErrorBoundary: true,
     suspense: true,
+    initialData: initialData,
   });
 
   const { actions: formActions } = useFormStore();
