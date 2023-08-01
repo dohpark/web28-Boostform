@@ -1,11 +1,17 @@
 import TextDropdown from "@/components/common/Dropdown/TextDropdown";
-import { useEditStore, useFormStore } from "@/store/edit";
+import { FormEditContext } from "@/contexts/formEditStoreProvider";
+import { useEditStore } from "@/store/edit";
 import { CATEGORY_LIST } from "@/store/form";
 import { ForumCategory } from "@/types/forum";
+import { useContext } from "react";
+import { useStore } from "zustand";
 
 function Head() {
   const { actions: editStateActions } = useEditStore();
-  const { form, actions: formActions } = useFormStore();
+  const formEditStore = useContext(FormEditContext);
+  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
+
+  const { form, actions: formActions } = useStore(formEditStore);
 
   const onClickTitle = () => {
     editStateActions.setFocus("title");

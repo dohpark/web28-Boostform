@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import ToggleButton from "@/components/common/ToggleButton";
 import Button from "@/components/common/Button";
 import Chain from "@public/icons/chain.svg";
 import ShareFormModalProps from "./type";
 import COLORS from "@/constants/color";
-import { useFormStore } from "@/store/edit";
 import { fromFormToApi } from "@/utils/form";
 import { toast } from "react-toastify";
 import formApi from "@/api/formApi";
 import { useParams } from "next/navigation";
+import { FormEditContext } from "@/contexts/formEditStoreProvider";
+import { useStore } from "zustand";
 
 function ShareFormModal({ closeModal }: ShareFormModalProps) {
   const { id } = useParams();
-  const { form, question, actions: formActions } = useFormStore();
+
+  const formEditStore = useContext(FormEditContext);
+  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
+
+  const { form, question, actions: formActions } = useStore(formEditStore);
+
   const { loginRequired, onBoard, acceptResponse, responseModifiable } = form;
 
   const onClickChangeLoginRequired = () => {

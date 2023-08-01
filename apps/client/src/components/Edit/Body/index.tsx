@@ -6,19 +6,25 @@ import ToggleButton from "@/components/common/ToggleButton";
 import QuestionRead from "@/components/Edit/Body/QuestionRead";
 import IconButton from "@/components/common/IconButton";
 import { QUESTION_TYPE_LIST } from "@/store/form";
-import { useEditStore, useFormStore } from "@/store/edit";
+import { useEditStore } from "@/store/edit";
 
 import DragIndicator from "@public/icons/dragIndicator.svg";
 import Add from "@public/icons/add.svg";
 import Copy from "@public/icons/copy.svg";
 import Trashcan from "@public/icons/trashcan.svg";
 import { QuestionType } from "@/types/form";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IconType } from "@/types/icons";
+import { FormEditContext } from "@/contexts/formEditStoreProvider";
+import { useStore } from "zustand";
 
 function Body() {
+  const formEditStore = useContext(FormEditContext);
+  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
+
+  const { question, actions: formActions } = useStore(formEditStore);
+
   const { focus, drag, hover, actions: editStateActions } = useEditStore();
-  const { question, actions: formActions } = useFormStore();
 
   const onClickQuestion = (index: number) => {
     editStateActions.setFocus(`q${index}`);
