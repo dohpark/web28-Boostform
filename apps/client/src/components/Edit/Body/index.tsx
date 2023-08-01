@@ -6,19 +6,25 @@ import ToggleButton from "@/components/common/ToggleButton";
 import QuestionRead from "@/components/Edit/Body/QuestionRead";
 import IconButton from "@/components/common/IconButton";
 import { QUESTION_TYPE_LIST } from "@/store/form";
-import { useEditStore, useFormStore } from "@/store/edit";
+import { useEditStore } from "@/store/edit";
 
 import DragIndicator from "@public/icons/dragIndicator.svg";
 import Add from "@public/icons/add.svg";
 import Copy from "@public/icons/copy.svg";
 import Trashcan from "@public/icons/trashcan.svg";
 import { QuestionType } from "@/types/form";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IconType } from "@/types/icons";
+import { FormEditContext } from "@/contexts/formEditStoreProvider";
+import { useStore } from "zustand";
 
 function Body() {
+  const formEditStore = useContext(FormEditContext);
+  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
+
+  const { question, actions: formActions } = useStore(formEditStore);
+
   const { focus, drag, hover, actions: editStateActions } = useEditStore();
-  const { question, actions: formActions } = useFormStore();
 
   const onClickQuestion = (index: number) => {
     editStateActions.setFocus(`q${index}`);
@@ -94,7 +100,7 @@ function Body() {
     }[]
   >([]);
 
-  const placeholder = useRef(document.createElement("div"));
+  const placeholder = useRef<HTMLDivElement | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [originalMouseY, setOriginalMouseY] = useState(0);
@@ -103,11 +109,16 @@ function Body() {
   const [direction, setDirection] = useState<"up" | "down">("up");
   const [destination, setDestination] = useState<number | null>(null);
 
+  useEffect(() => {
+    placeholder.current = document.createElement("div");
+  }, []);
+
   // mouse down logic
   useEffect(() => {
     if (!isMouseDown) return;
     if (!droppableRef.current) return;
     if (selectedIndex === null) return;
+    if (!placeholder.current) return;
 
     // capture
     draggableRef.current = Array.from(droppableRef.current.children) as HTMLDivElement[];
@@ -173,6 +184,7 @@ function Body() {
   useEffect(() => {
     if (!droppableRef.current) return;
     if (selectedIndex === null) return;
+    if (!placeholder.current) return;
 
     // handleMouseDown
     if (isMouseDown) {
@@ -227,6 +239,7 @@ function Body() {
     if (isMouseDown) return;
     if (selectedIndex === null) return;
     if (!droppableRef.current) return;
+    if (!placeholder.current) return;
 
     if (destination === null) {
       // delete placeholder
@@ -277,6 +290,7 @@ function Body() {
 
     const timerId = setTimeout(() => {
       if (!droppableRef.current) return;
+      if (!placeholder.current) return;
 
       // delete placeholder
       if (Array.from(droppableRef.current.children).includes(placeholder.current)) {
