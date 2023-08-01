@@ -4,7 +4,7 @@ import Edit from "@/components/Edit";
 
 async function getInitialData(id: string) {
   try {
-    const res = await fetch(`http://172.17.0.1:8080/api/forms/${id}`, {
+    const res = await fetch(`http://server:8080/api/forms/${id}`, {
       cache: "no-store",
     });
 
