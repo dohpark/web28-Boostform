@@ -9,7 +9,7 @@ import { AuthContextProps, AuthProps } from "./type";
 export const AuthContext = createContext<AuthContextProps>({});
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [auth, setAuth] = useState<AuthProps>({ userId: "", userName: "", isSuccess: false });
+  const [auth, setAuth] = useState<AuthProps>({ userId: "", userName: "", state: "loading" });
   const [cookies] = useCookies();
 
   const fetchUserId = (): Promise<{ userID: string; userName: string }> =>
@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   useEffect(() => {
-    if (isSuccess) setAuth({ userId: data.userID, userName: data.userName, isSuccess });
+    if (isSuccess) setAuth({ userId: data.userID, userName: data.userName, state: isSuccess ? "login" : "logout" });
   }, [data, isSuccess]);
 
   const AuthContextValue = useMemo(() => ({ auth, setAuth }), [auth, setAuth]);

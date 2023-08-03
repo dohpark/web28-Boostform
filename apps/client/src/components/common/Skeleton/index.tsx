@@ -4,19 +4,21 @@ import { SkeletonType, SkeletonContainerProps } from "./type";
 const getSkeletonTypeCss = (type: SkeletonType) => {
   switch (type) {
     case "text":
-      return "w-full h-3 my-2 mx-0";
+      return "w-full h-3 my-2 mx-0 bg-grey2";
     case "title":
-      return "w-1/2 h-5 mb-4 mt-2";
+      return "w-1/2 h-5 mb-4 mt-2 bg-grey2";
     case "formTitle":
-      return "w-1/3 h-7 py-1 px-0 mt-2 mx-0 mb-5";
+      return "w-1/3 h-7 py-1 px-0 mt-2 mx-0 mb-5 bg-grey2";
     case "formCategoryBox":
-      return "w-[150px] h-[38px]";
+      return "w-[150px] h-[38px] bg-grey2";
     case "formQuestionTitleEdit":
-      return "w-1/3 h-4 mt-7 mx-0 mb-5";
+      return "w-1/3 h-4 mt-7 mx-0 mb-5 bg-grey2";
     case "formQuestionTitle":
-      return "w-1/3 h-4 mb-5";
+      return "w-1/3 h-4 mb-5 bg-grey2";
     case "button":
-      return "w-[55px] h-[30px]";
+      return "w-[55px] h-[30px] bg-grey2";
+    case "loginButton":
+      return "px-4 py-2 rounded h-9 w-20 bg-grey0";
     default:
       return "";
   }
@@ -30,7 +32,7 @@ function SkeletonContainer({ children, className: customCss }: SkeletonContainer
 }
 
 function Element({ type }: { type: SkeletonType }) {
-  const defaultCss = "rounded bg-grey2";
+  const defaultCss = "rounded";
   const customCss = getSkeletonTypeCss(type);
   const className = `${defaultCss} ${customCss}`;
 

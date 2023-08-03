@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "@/contexts/authProvider";
 import authApi from "@/api/authApi";
 import Button from "@/components/common/Button";
+import Loading from "./loading";
 
 function Header() {
   const { auth, setAuth } = useContext(AuthContext);
@@ -19,7 +20,7 @@ function Header() {
   const onClickLogout = () => {
     if (!setAuth) return;
     authApi.logout();
-    setAuth({ userId: "", userName: "" });
+    setAuth({ userId: "", userName: "", state: "logout" });
     router.push("/");
   };
 
@@ -46,16 +47,17 @@ function Header() {
           <Link href="/forum" className="mr-12">
             게시판
           </Link>
-          {auth?.userId && (
+          {auth?.state === "login" && (
             <Button type="button" onClick={onClickLogout} className="bg-white text-blue3 text-sm border border-blue3">
               로그아웃
             </Button>
           )}
-          {!auth?.userId && (
+          {auth?.state === "logout" && (
             <Button type="button" onClick={onClickLogin} className="bg-blue3 text-white text-base border-none">
               로그인
             </Button>
           )}
+          {auth?.state === "loading" && <Loading />}
         </div>
       </div>
     </header>

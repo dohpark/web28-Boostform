@@ -5,7 +5,8 @@ type SkeletonType =
   | "formCategoryBox"
   | "formQuestionTitle"
   | "button"
-  | "formQuestionTitleEdit";
+  | "formQuestionTitleEdit"
+  | "loginButton";
 
 interface SkeletonContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
