@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchUserId = (): Promise<{ userID: string; userName: string }> =>
     authApi.getUserInfo(cookies.accessToken as string | null);
-  const { data, isSuccess } = useQuery({
+  const { data, isSuccess, isError } = useQuery({
     queryKey: ["userId"],
     queryFn: fetchUserId,
     refetchOnWindowFocus: false,
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isSuccess) setAuth({ userId: data.userID, userName: data.userName, state: isSuccess ? "login" : "logout" });
+    if (isError) setAuth({ userId: "", userName: "", state: "logout" });
   }, [data, isSuccess]);
 
   const AuthContextValue = useMemo(() => ({ auth, setAuth }), [auth, setAuth]);
