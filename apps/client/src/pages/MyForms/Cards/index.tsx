@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Card from "@/components/common/Card";
 import Notice from "@/components/common/Notice";
@@ -23,7 +23,6 @@ export default function Cards({ openModal }: CardsProps) {
     queryFn: ({ pageParam = "empty" }) => fetchFormLists(pageParam),
     getNextPageParam: (lastItem) => lastItem.lastId,
     retry: 2,
-    useErrorBoundary: true,
     suspense: true,
   });
 
