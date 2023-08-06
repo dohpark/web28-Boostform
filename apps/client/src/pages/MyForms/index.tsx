@@ -6,7 +6,9 @@ import useModal from "@/hooks/useModal";
 import Modal from "./Modal";
 import CreateForm from "./CreateForm";
 import CardsSkeleton from "./loading";
-import Cards from "./Cards";
+
+import dynamic from "next/dynamic";
+const Cards = dynamic(() => import("./Cards"), { ssr: false, loading: () => <CardsSkeleton /> });
 
 function MyForms() {
   const { openModal, ModalPortal, closeModal } = useModal();

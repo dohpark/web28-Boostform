@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Card from "@/components/common/Card";
 import Notice from "@/components/common/Notice";
