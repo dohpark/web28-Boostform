@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
-import EditNameModal from "@/pages/MyForms/Modal/EditFormNameModal";
-import DeleteSurveyModal from "@/pages/MyForms/Modal/DeleteFormModal";
+import EditNameModal from "@/components/MyForms/Modal/EditFormNameModal";
+import DeleteSurveyModal from "@/components/MyForms/Modal/DeleteFormModal";
 import { useMyForms } from "@/store/myForms";
 
 interface ModalProps {

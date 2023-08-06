@@ -1,4 +1,4 @@
-import MyForms from "@/pages/MyForms";
+import MyForms from "@/components/MyForms";
 
 export default function Page() {
   return <MyForms />;
