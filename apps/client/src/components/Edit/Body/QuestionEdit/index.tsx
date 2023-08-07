@@ -1,15 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import Objective from "./Objective";
 import Subjective from "./Subjective";
 import QuestionProps from "./type";
-import { FormEditContext } from "@/contexts/formEditStoreProvider";
-import { useStore } from "zustand";
+import { useFormStore } from "@/store/edit";
 
 function Question({ index }: QuestionProps) {
-  const formEditStore = useContext(FormEditContext);
-  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
-
-  const { question } = useStore(formEditStore);
+  const { question } = useFormStore();
 
   const { type } = question[index];
   return (

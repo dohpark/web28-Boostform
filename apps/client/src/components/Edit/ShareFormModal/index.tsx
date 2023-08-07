@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import ToggleButton from "@/components/common/ToggleButton";
 import Button from "@/components/common/Button";
 import Chain from "@public/icons/chain.svg";
@@ -8,16 +8,12 @@ import { fromFormToApi } from "@/utils/form";
 import { toast } from "react-toastify";
 import formApi from "@/api/formApi";
 import { useParams } from "next/navigation";
-import { FormEditContext } from "@/contexts/formEditStoreProvider";
-import { useStore } from "zustand";
+import { useFormStore } from "@/store/edit";
 
 function ShareFormModal({ closeModal }: ShareFormModalProps) {
   const { id } = useParams();
 
-  const formEditStore = useContext(FormEditContext);
-  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
-
-  const { form, question, actions: formActions } = useStore(formEditStore);
+  const { form, question, actions: formActions } = useFormStore();
 
   const { loginRequired, onBoard, acceptResponse, responseModifiable } = form;
 

@@ -1,13 +1,12 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import React, { Suspense } from "react";
 import BannerLayout from "@/components/template/BannerLayout";
 import useModal from "@/hooks/useModal";
 import Modal from "./Modal";
 import CreateForm from "./CreateForm";
 import CardsSkeleton from "./loading";
-
-import dynamic from "next/dynamic";
 const Cards = dynamic(() => import("./Cards"), { ssr: false, loading: () => <CardsSkeleton /> });
 
 function MyForms() {

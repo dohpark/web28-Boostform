@@ -1,34 +1,12 @@
 import React, { Suspense } from "react";
 import Loading from "./loading";
-import Edit from "@/components/Edit";
+import dynamic from "next/dynamic";
+const Edit = dynamic(() => import("@/components/Edit"), { ssr: false, loading: () => <Loading /> });
 
-async function getInitialData(id: string) {
-  try {
-    const res = await fetch(`http://server:8080/api/forms/${id}`, {
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    return res.json();
-  } catch (e) {
-    console.log(e);
-  }
-  return;
-}
-
-interface PageProps {
-  params: { id: string };
-}
-
-export default async function Page({ params: { id } }: PageProps) {
-  const initialData = await getInitialData(id);
-
+export default async function Page() {
   return (
     <Suspense fallback={<Loading />}>
-      <Edit initialData={initialData} />
+      <Edit />
     </Suspense>
   );
 }
