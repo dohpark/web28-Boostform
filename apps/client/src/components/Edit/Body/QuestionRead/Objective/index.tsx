@@ -1,15 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import CheckboxEmpty from "@public/icons/checkboxEmpty.svg";
 import MultipleEmpty from "@public/icons/multipleEmpty.svg";
 import COLORS from "@/constants/color";
-import { FormEditContext } from "@/contexts/formEditStoreProvider";
-import { useStore } from "zustand";
+import { useFormStore } from "@/store/edit";
 
 function Objective({ index }: { index: number }) {
-  const formEditStore = useContext(FormEditContext);
-  if (!formEditStore) throw new Error("Missing FormEditContext.Provider in the tree");
-
-  const { question } = useStore(formEditStore);
+  const { question } = useFormStore();
   const { option, type } = question[index];
 
   return (

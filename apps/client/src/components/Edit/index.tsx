@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 
 import useModal from "@/hooks/useModal";
@@ -10,17 +10,35 @@ import Head from "@/components/Edit/Head";
 import Submit from "@/components/Edit/Submit";
 import Body from "@/components/Edit/Body";
 import ShareFormModal from "@/components/Edit/ShareFormModal";
-import { createFormStore } from "@/store/edit";
 import "react-toastify/dist/ReactToastify.min.css";
-import { FormEditContext } from "@/contexts/formEditStoreProvider";
+import { useParams } from "next/navigation";
+import formApi from "@/api/formApi";
+import { useQuery } from "@tanstack/react-query";
+import { useFormStore } from "@/store/edit";
 
-function Edit({ initialData }: { initialData: FormDataApi }) {
-  const store = createFormStore(fromApiToForm(initialData, "edit"));
+function Edit() {
+  const { id } = useParams();
 
+  const fetchForm = (): Promise<FormDataApi> => formApi.getForm(id as string);
+  const { data, isSuccess } = useQuery({
+    queryKey: [id],
+    queryFn: fetchForm,
+    refetchOnWindowFocus: false,
+    retry: 2,
+    useErrorBoundary: true,
+    suspense: true,
+  });
+
+  const { actions: formActions } = useFormStore();
   const { openModal, closeModal, ModalPortal } = useModal();
 
+  useEffect(() => {
+    if (!id) return;
+    if (isSuccess) formActions.fetchData(fromApiToForm(data, "edit"));
+  }, [data, id, isSuccess]);
+
   return (
-    <FormEditContext.Provider value={store}>
+    <>
       <Head />
       <Body />
       <Submit openModal={openModal} />
@@ -40,7 +58,7 @@ function Edit({ initialData }: { initialData: FormDataApi }) {
         pauseOnHover={false}
         theme="light"
       />
-    </FormEditContext.Provider>
+    </>
   );
 }
 
