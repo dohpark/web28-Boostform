@@ -26,13 +26,24 @@ import {
   fromApiToValidateCheckList,
   validationCheck,
 } from "@/utils/response";
+import { useResponseHistory } from "@/store/responseHistory";
+
+type ParamsProps = {
+  id: string;
+};
 
 function View() {
-  const { id } = useParams();
+  const { id } = useParams() as ParamsProps;
   const { auth } = useContext(AuthContext);
   const router = useRouter();
-  // const { state: prevResponseId } = useLocation();
-  const prevResponseId = "";
+  const { responseId, actions } = useResponseHistory();
+
+  const [localResponseId] = useState(responseId);
+
+  useEffect(() => {
+    actions.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { openModal, closeModal, ModalPortal } = useModal({ setBackgroundClickClose: true });
 
@@ -49,14 +60,14 @@ function View() {
     useErrorBoundary: true,
   });
 
-  const fetchResponse = (): Promise<ResponseElement[]> => responseApi.getResponse(id as string, prevResponseId);
+  const fetchResponse = (): Promise<ResponseElement[]> => responseApi.getResponse(id as string, localResponseId);
   const {
     data: responseData,
     isSuccess: responseIsSuccess,
     isLoading: responseIsLoading,
     isError: resposneIsError,
   } = useQuery({
-    queryKey: [prevResponseId, "response"],
+    queryKey: [localResponseId, "response"],
     queryFn: fetchResponse,
     retry: 2,
     useErrorBoundary: true,
@@ -67,12 +78,12 @@ function View() {
   const { data: isDuplicateResponse } = useQuery({
     queryKey: [id, "duplicateResponse", auth?.userId],
     queryFn: checkDuplicateResponse,
-    // onError: (error: { response: { status: number } }) => {
-    //   const { status } = error.response;
-    //   if (status === 400 || status === 404 || status === 404 || status === 500)
-    //     router.push("/error", { state: status });
-    //   if (status === 401) router.push("/login");
-    // },
+    onError: (error: { response: { status: number } }) => {
+      const { status } = error.response;
+      // if (status === 400 || status === 404 || status === 404 || status === 500)
+      //   router.push("/error", { state: status });
+      if (status === 401) router.push("/login");
+    },
   });
 
   const loadingDelay = useLoadingDelay(formIsLoading || responseIsLoading);
@@ -85,9 +96,8 @@ function View() {
 
   useEffect(() => {
     if (formIsSuccess && !formData.acceptResponse) {
-      router.push(`/forms/${id}/response`, {
-        // state: { responseId: "", type: "endResponse" },
-      });
+      actions.setType("endResponse");
+      router.push(`/forms/${id}/response`);
       return;
     }
     if (
@@ -95,7 +105,7 @@ function View() {
       formData.loginRequired &&
       isDuplicateResponse?.responseId &&
       formData.responseModifiable &&
-      prevResponseId
+      localResponseId
     ) {
       // 중복 응답이 불가능(로그인 필수)하지만 재수정하는 경우
       return;
@@ -103,15 +113,15 @@ function View() {
 
     if (formIsSuccess && formData.loginRequired && isDuplicateResponse?.responseId) {
       // 중복 응답이 불가능(로그인 필수)하고 재수정이 아닌 경우
-      router.push(`/forms/${id}/response`, {
-        // state: { responseId: isDuplicateResponse.responseId, type: "duplicateResponse" },
-      });
+      actions.setResponseId(isDuplicateResponse.responseId);
+      actions.setType("duplicateResponse");
+      router.push(`/forms/${id}/response`);
       return;
     }
-    if (formIsSuccess && formData.loginRequired && auth?.isSuccess && !auth?.userId) {
+    if (formIsSuccess && formData.loginRequired && auth?.state === "login" && !auth?.userId) {
       openModal();
     }
-  }, [auth, formData, formIsSuccess, router, openModal, isDuplicateResponse, prevResponseId, id, closeModal]);
+  }, [auth, formData, formIsSuccess, router, openModal, isDuplicateResponse, localResponseId, id, closeModal, actions]);
 
   useEffect(() => {
     if (!id) return;
@@ -153,12 +163,13 @@ function View() {
         theme: "light",
       });
     if (checkResult) {
-      let responseId;
-      if (!prevResponseId) responseId = await responseApi.sendResponse(id as string, responseState);
-      if (prevResponseId) responseId = await responseApi.patchResponse(id as string, prevResponseId, responseState);
-      router.push(`/forms/${id}/response`, {
-        // state: { responseId, type: "submitResponse" }
-      });
+      let newResponseId;
+      if (!localResponseId) newResponseId = await responseApi.sendResponse(id as string, responseState);
+      if (localResponseId)
+        newResponseId = await responseApi.patchResponse(id as string, localResponseId, responseState);
+      actions.setResponseId(newResponseId);
+      actions.setType("submitResponse");
+      router.push(`/forms/${id}/response`);
     }
   };
 
@@ -261,7 +272,7 @@ function View() {
           theme="light"
         />
         <ModalPortal>
-          <LoginModal closeModal={closeModal} />
+          <LoginModal />
         </ModalPortal>
       </div>
     </FormLayout>

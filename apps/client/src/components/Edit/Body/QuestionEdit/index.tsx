@@ -1,8 +1,8 @@
 import React from "react";
+import { useFormStore } from "@/store/edit";
 import Objective from "./Objective";
 import Subjective from "./Subjective";
 import QuestionProps from "./type";
-import { useFormStore } from "@/store/edit";
 
 function Question({ index }: QuestionProps) {
   const { question } = useFormStore();

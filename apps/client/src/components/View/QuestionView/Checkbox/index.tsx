@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import IconButton from "@/components/common/IconButton";
+import Error from "@public/icons/error.svg";
 import CheckboxFull from "@public/icons/checkboxFull.svg";
 import CheckboxEmpty from "@public/icons/checkboxEmpty.svg";
-import Error from "@public/icons/error.svg";
-import { QuestionViewProps } from "../type";
+import IconButton from "@/components/common/IconButton";
 import COLORS from "@/constants/color";
+import { QuestionViewProps } from "../type";
 
 function Checkbox({
   questionState,

@@ -1,12 +1,12 @@
 import React from "react";
-import IconButton from "@/components/common/IconButton";
-import TextButton from "@/components/common/TextButton";
-import COLORS from "@/constants/color";
 import CheckboxEmpty from "@public/icons/checkboxEmpty.svg";
 import MultipleEmpty from "@public/icons/multipleEmpty.svg";
 import Close from "@public/icons/close.svg";
-import ObjectiveProps from "./type";
+import IconButton from "@/components/common/IconButton";
+import TextButton from "@/components/common/TextButton";
+import COLORS from "@/constants/color";
 import { useFormStore } from "@/store/edit";
+import ObjectiveProps from "./type";
 
 function Objective({ index }: ObjectiveProps) {
   const { question, actions: formActions } = useFormStore();

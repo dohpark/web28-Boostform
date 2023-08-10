@@ -1,7 +1,7 @@
 import React from "react";
 import Error from "@public/icons/error.svg";
-import { QuestionViewProps } from "../type";
 import COLORS from "@/constants/color";
+import { QuestionViewProps } from "../type";
 
 function Paragraph({
   questionState,

@@ -15,7 +15,7 @@ const responseApi = {
     const { data } = await axios.post(`${API.RESPONSE}/${formId}`, { answerList: response }, { withCredentials: true });
     return data.responseId;
   },
-  getResponse: async (formId: string | undefined, responseId: string | undefined) => {
+  getResponse: async (formId: string | undefined, responseId: string | undefined | null) => {
     if (!formId || !responseId) return [];
     const { data } = await axios.get(`${API.RESPONSE}/${formId}/${responseId}`, { withCredentials: true });
     return data.answerList;

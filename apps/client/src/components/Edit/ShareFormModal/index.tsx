@@ -1,17 +1,22 @@
 import React from "react";
+import { useParams } from "next/navigation";
+import { toast } from "react-toastify";
+import Chain from "@public/icons/chain.svg";
+
 import ToggleButton from "@/components/common/ToggleButton";
 import Button from "@/components/common/Button";
-import Chain from "@public/icons/chain.svg";
-import ShareFormModalProps from "./type";
 import COLORS from "@/constants/color";
 import { fromFormToApi } from "@/utils/form";
-import { toast } from "react-toastify";
 import formApi from "@/api/formApi";
-import { useParams } from "next/navigation";
 import { useFormStore } from "@/store/edit";
+import ShareFormModalProps from "./type";
+
+type ParamsProps = {
+  id: string;
+};
 
 function ShareFormModal({ closeModal }: ShareFormModalProps) {
-  const { id } = useParams();
+  const { id } = useParams() as ParamsProps;
 
   const { form, question, actions: formActions } = useFormStore();
 

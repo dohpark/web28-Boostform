@@ -19,7 +19,13 @@ function ToggleButton({ state, onClick }: ToggleButtonProps) {
   return (
     <div className="h-6">
       <div className={toggleClassName}>
-        <button className={buttonClassName} onClick={onClickToggle} onTransitionEnd={() => onClick()} />
+        <button
+          type="button"
+          className={buttonClassName}
+          onClick={onClickToggle}
+          onTransitionEnd={() => onClick()}
+          aria-label="Set True or False"
+        />
       </div>
     </div>
   );

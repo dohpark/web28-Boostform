@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import Dropdown from "@public/icons/dropdown.svg";
 import OutsideDetecter from "@/hooks/useOutsideDetecter";
 import { IconDropdownProps } from "./type";
-import Dropdown from "@public/icons/dropdown.svg";
 
-function IconDropdown({ state, setState, items, defaultValue }: IconDropdownProps) {
+function IconDropdown({ state, setState, items }: IconDropdownProps) {
   const findItem = (str: string) => {
     const targetIndex = items.find((item) => {
       if (item.value === str) return item;
+      return null;
     });
     return targetIndex;
   };

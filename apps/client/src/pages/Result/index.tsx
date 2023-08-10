@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
 import resultApi from "@/api/resultApi";
 import FormLayout from "@/components/template/Layout";
@@ -9,10 +10,13 @@ import QuestionResult from "@/components/Result/QuestionResult";
 import Skeleton from "@/components/common/Skeleton";
 import useLoadingDelay from "@/hooks/useLoadingDelay";
 import { ResultApi, QuestionSummary } from "@/types/result";
-import { useParams } from "next/navigation";
+
+type ParamsProps = {
+  id: string;
+};
 
 function Result() {
-  const { id } = useParams();
+  const { id } = useParams() as ParamsProps;
 
   const fetchForm = (): Promise<ResultApi> => resultApi.getResult(id as string);
   const { data, isSuccess, isLoading, isError } = useQuery({

@@ -1,4 +1,13 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { toast } from "react-toastify";
+import { useEffect, useRef, useState } from "react";
+
+import DragIndicator from "@public/icons/dragIndicator.svg";
+import Add from "@public/icons/add.svg";
+import Copy from "@public/icons/copy.svg";
+import Trashcan from "@public/icons/trashcan.svg";
 
 import IconDropdown from "@/components/common/Dropdown/IconDropdown";
 import Question from "@/components/Edit/Body/QuestionEdit";
@@ -8,12 +17,7 @@ import IconButton from "@/components/common/IconButton";
 import { QUESTION_TYPE_LIST } from "@/store/form";
 import { useEditStore, useFormStore } from "@/store/edit";
 
-import DragIndicator from "@public/icons/dragIndicator.svg";
-import Add from "@public/icons/add.svg";
-import Copy from "@public/icons/copy.svg";
-import Trashcan from "@public/icons/trashcan.svg";
 import { QuestionType } from "@/types/form";
-import { useEffect, useRef, useState } from "react";
 import { IconType } from "@/types/icons";
 
 function Body() {
@@ -153,24 +157,26 @@ function Body() {
 
     // target style
     selectedItem.style.position = "fixed";
-    selectedItem.style.width = snapshotRef.current[selectedIndex].width + "px";
-    selectedItem.style.height = snapshotRef.current[selectedIndex].height + "px";
+    selectedItem.style.width = `${snapshotRef.current[selectedIndex].width}px`;
+    selectedItem.style.height = `${snapshotRef.current[selectedIndex].height}px`;
 
-    selectedItem.style.top =
-      snapshotRef.current[selectedIndex].top - snapshotRef.current[selectedIndex].marginTop + "px";
-    selectedItem.style.left =
-      snapshotRef.current[selectedIndex].left - snapshotRef.current[selectedIndex].marginLeft + "px";
+    selectedItem.style.top = `${
+      snapshotRef.current[selectedIndex].top - snapshotRef.current[selectedIndex].marginTop
+    }px`;
+    selectedItem.style.left = `${
+      snapshotRef.current[selectedIndex].left - snapshotRef.current[selectedIndex].marginLeft
+    }px`;
     selectedItem.style.boxSizing = "border-box";
     selectedItem.style.zIndex = "5000";
     selectedItem.style.pointerEvents = "none";
 
     // create placeholder
-    placeholder.current.style.height = snapshotRef.current[selectedIndex].height + "px";
-    placeholder.current.style.width = snapshotRef.current[selectedIndex].width + "px";
-    placeholder.current.style.marginTop = snapshotRef.current[selectedIndex].marginTop + "px";
-    placeholder.current.style.marginBottom = snapshotRef.current[selectedIndex].marginBottom + "px";
-    placeholder.current.style.marginLeft = snapshotRef.current[selectedIndex].marginLeft + "px";
-    placeholder.current.style.marginRight = snapshotRef.current[selectedIndex].marginRight + "px";
+    placeholder.current.style.height = `${snapshotRef.current[selectedIndex].height}px`;
+    placeholder.current.style.width = `${snapshotRef.current[selectedIndex].width}px`;
+    placeholder.current.style.marginTop = `${snapshotRef.current[selectedIndex].marginTop}px`;
+    placeholder.current.style.marginBottom = `${snapshotRef.current[selectedIndex].marginBottom}px`;
+    placeholder.current.style.marginLeft = `${snapshotRef.current[selectedIndex].marginLeft}px`;
+    placeholder.current.style.marginRight = `${snapshotRef.current[selectedIndex].marginRight}px`;
 
     droppableRef.current.appendChild(placeholder.current);
   }, [isMouseDown, selectedIndex]);
@@ -222,19 +228,20 @@ function Body() {
       // detection
       const slice = draggableRef.current.slice();
       slice.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
-      const destination = slice.findIndex(
-        (node) => node.getAttribute("data-id") == selectedItem.getAttribute("data-id")
+      const destinationIndex = slice.findIndex(
+        (node) => node.getAttribute("data-id") === selectedItem.getAttribute("data-id")
       );
-      setDestination(destination);
+      setDestination(destinationIndex);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [destinationMouseY, direction, scrollMovingY]);
 
   // mouse up logic
   useEffect(() => {
-    if (isMouseDown) return;
-    if (selectedIndex === null) return;
-    if (!droppableRef.current) return;
-    if (!placeholder.current) return;
+    if (isMouseDown) return undefined;
+    if (selectedIndex === null) return undefined;
+    if (!droppableRef.current) return undefined;
+    if (!placeholder.current) return undefined;
 
     if (destination === null) {
       // delete placeholder
@@ -254,7 +261,7 @@ function Body() {
       // document style
       document.body.removeAttribute("style");
 
-      return;
+      return undefined;
     }
 
     // destination으로 이동
@@ -310,8 +317,9 @@ function Body() {
     }, 300);
 
     return () => {
-      timerId && clearTimeout(timerId);
+      if (timerId) clearTimeout(timerId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMouseDown]);
 
   const handleMouseMove = (e: MouseEvent) => {

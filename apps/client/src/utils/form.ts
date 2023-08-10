@@ -35,12 +35,10 @@ const fromApiToForm = (api: FormDataApi, pageType: string): FormState => {
       ({ questionId, page, type, essential, etcAdded, title: questionTitle, option }) => {
         if (currentQuestionId <= questionId) currentQuestionId = questionId;
 
-        const formOptionList = option.map((value, optionIndex) => {
-          return {
-            choiceId: optionIndex + 1,
-            value,
-          };
-        });
+        const formOptionList = option.map((value, optionIndex) => ({
+          choiceId: optionIndex + 1,
+          value,
+        }));
 
         return {
           questionId,

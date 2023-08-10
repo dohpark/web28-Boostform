@@ -22,6 +22,8 @@ function Forum() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  if (!searchParams) throw Error("searchParams not available");
+
   const initPage = Number(searchParams.get("page")) || 1;
   const initCategory = searchParams.get("category") || "";
   const initKeyword = searchParams.get("keyword") || "";
@@ -61,12 +63,17 @@ function Forum() {
   const loadingDelay = useLoadingDelay(isLoading);
 
   const checkApiLoadingOrError = () => isLoading || loadingDelay || isError;
-  const createQueryString = ({ page, category, keyword, orderBy }: SearchParams) => {
+  const createQueryString = ({
+    page: paramPage,
+    category: paramCategory,
+    keyword: paramKeyword,
+    orderBy: paramOrderBy,
+  }: SearchParams) => {
     const params = new URLSearchParams(searchParams);
-    params.set("page", page.toString());
-    params.set("category", category);
-    params.set("keyword", keyword);
-    params.set("orderBy", orderBy);
+    params.set("page", paramPage.toString());
+    params.set("category", paramCategory);
+    params.set("keyword", paramKeyword);
+    params.set("orderBy", paramOrderBy);
 
     return params.toString();
   };
@@ -98,7 +105,7 @@ function Forum() {
         </form>
         <div className="w-full h-9 mb-2 flex justify-between items-center">
           <div className="flex">
-            <label className="ml-6">
+            <label className="ml-6" htmlFor="latestAsc">
               <input
                 className="hidden peer"
                 type="radio"
@@ -113,7 +120,7 @@ function Forum() {
                 최신순
               </div>
             </label>
-            <label className="ml-6">
+            <label className="ml-6" htmlFor="responseAsc">
               <input
                 className="hidden peer"
                 type="radio"
@@ -128,7 +135,7 @@ function Forum() {
                 응답 높은순
               </div>
             </label>
-            <label className="ml-6">
+            <label className="ml-6" htmlFor="responseDesc">
               <input
                 className="hidden peer"
                 type="radio"

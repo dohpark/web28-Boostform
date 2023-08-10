@@ -1,16 +1,10 @@
 import TextDropdown from "@/components/common/Dropdown/TextDropdown";
-import { useEditStore, useFormStore } from "@/store/edit";
+import { useFormStore } from "@/store/edit";
 import { CATEGORY_LIST } from "@/store/form";
 import { ForumCategory } from "@/types/forum";
 
 function Head() {
-  const { actions: editStateActions } = useEditStore();
-
   const { form, actions: formActions } = useFormStore();
-
-  const onClickTitle = () => {
-    editStateActions.setFocus("title");
-  };
 
   const onClickSelectCategory = (value: ForumCategory) => {
     formActions.selectCategory(value);
@@ -25,7 +19,7 @@ function Head() {
   };
 
   return (
-    <div className="mt-9 bg-white rounded p-5" onClick={() => onClickTitle()}>
+    <div className="mt-9 bg-white rounded p-5">
       <input
         className="w-full block text-2xl py-1 px-0 border-b border-b-grey3 leading-9 focus:outline-none focus:border-b focus:border-b-black"
         onInput={onInputTitle}
