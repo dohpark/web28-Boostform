@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useFormStore } from "@/store/edit";
 import Objective from "./Objective";
 import Subjective from "./Subjective";
-import { useFormStore } from "@/store/edit";
 
 function QuestionRead({ index }: { index: number }) {
   const { question } = useFormStore();

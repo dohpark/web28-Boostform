@@ -33,7 +33,11 @@ const useModal = (option?: { setBackgroundClickClose: boolean }) => {
       return createPortal(
         <div className="w-full h-full fixed top-0 left-0 z-10 m-0">
           {children}
-          <div className="absolute w-full h-full bg-black bg-opacity-75" onClick={onClickBackgroundCloseModal} />
+          <div
+            className="absolute w-full h-full bg-black bg-opacity-75"
+            onClick={onClickBackgroundCloseModal}
+            role="presentation"
+          />
         </div>,
         document.getElementById("modal-root") as HTMLElement
       );

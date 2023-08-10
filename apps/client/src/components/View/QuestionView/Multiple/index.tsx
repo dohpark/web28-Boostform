@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import IconButton from "@/components/common/IconButton";
 import Error from "@public/icons/error.svg";
 import MultipleFull from "@public/icons/multipleFull.svg";
 import MultipleEmpty from "@public/icons/multipleEmpty.svg";
-import { QuestionViewProps } from "../type";
+import IconButton from "@/components/common/IconButton";
 import COLORS from "@/constants/color";
+import { QuestionViewProps } from "../type";
 
 function Multiple({
   questionState,

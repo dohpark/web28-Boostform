@@ -39,13 +39,12 @@ function Multiple({ answerTotal }: { answerTotal: AnswerTotal }) {
         boxWidth: 10,
         onClick: () => null,
         labels: {
-          generateLabels: () => {
-            return Object.keys(answerTotal).map((name, index) => ({
+          generateLabels: () =>
+            Object.keys(answerTotal).map((name, index) => ({
               text: name,
               strokeStyle: colorSet[index].borderColor,
               fillStyle: colorSet[index].backgroundColor,
-            }));
-          },
+            })),
         },
       },
     },

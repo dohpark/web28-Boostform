@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import IconButton from "@/components/common/IconButton";
-import Left from "@public/icons/left.svg";
 import Right from "@public/icons/right.svg";
+import Left from "@public/icons/left.svg";
+import IconButton from "@/components/common/IconButton";
 import COLORS from "@/constants/color";
 
 interface PaginationProps {
@@ -41,8 +41,10 @@ function Pagination({ currentPage, lastPage, callback }: PaginationProps) {
           const className = currentPage === number ? `${defaultCss} ${conditionalCss}` : defaultCss;
 
           return (
-            <li key={number} onClick={() => callback(number)} className={className}>
-              {number}
+            <li key={number} className={className}>
+              <button onClick={() => callback(number)} type="button" className="w-full">
+                {number}
+              </button>
             </li>
           );
         })}

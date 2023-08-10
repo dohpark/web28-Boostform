@@ -1,8 +1,8 @@
 import React from "react";
-import Button from "@/components/common/Button";
 import { useRouter } from "next/navigation";
+import Button from "@/components/common/Button";
 
-function LoginModal({ closeModal }: { closeModal: () => void }) {
+function LoginModal() {
   const router = useRouter();
 
   const onClickLogin = () => {

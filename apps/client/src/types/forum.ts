@@ -1,4 +1,4 @@
-type ForumCategory = "개발 및 학습" | "취업 및 채용" | "취미 및 여가" | "기타";
+type ForumCategory = "개발 및 학습" | "취업 및 채용" | "취미 및 여가" | "기타" | "전체";
 
 type OrderBy = "latestAsc" | "responseAsc" | "responseDesc";
 

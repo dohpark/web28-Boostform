@@ -1,8 +1,9 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-
+import { useQuery } from "@tanstack/react-query";
 import useModal from "@/hooks/useModal";
 import { FormDataApi } from "@/types/form";
 import { fromApiToForm } from "@/utils/form";
@@ -11,13 +12,15 @@ import Submit from "@/components/Edit/Submit";
 import Body from "@/components/Edit/Body";
 import ShareFormModal from "@/components/Edit/ShareFormModal";
 import "react-toastify/dist/ReactToastify.min.css";
-import { useParams } from "next/navigation";
 import formApi from "@/api/formApi";
-import { useQuery } from "@tanstack/react-query";
 import { useFormStore } from "@/store/edit";
 
+type ParamsProps = {
+  id: string;
+};
+
 function Edit() {
-  const { id } = useParams();
+  const { id } = useParams() as ParamsProps;
 
   const fetchForm = (): Promise<FormDataApi> => formApi.getForm(id as string);
   const { data, isSuccess } = useQuery({
@@ -35,7 +38,7 @@ function Edit() {
   useEffect(() => {
     if (!id) return;
     if (isSuccess) formActions.fetchData(fromApiToForm(data, "edit"));
-  }, [data, id, isSuccess]);
+  }, [data, id, isSuccess, formActions]);
 
   return (
     <>

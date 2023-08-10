@@ -25,10 +25,11 @@ function Login() {
           height={67}
           alt="logo"
           draggable={false}
-          priority={true}
+          priority
           className="h-auto w-[300px]"
         />
         <button
+          type="button"
           onClick={handleClickOAuth}
           className="w-[460px] flex items-center justify-center bg-black border-none text-white mt-9 py-2 px-4 text-base rounded-lg cursor-pointer font-medium"
         >
@@ -36,6 +37,7 @@ function Login() {
           <span className="ml-2">깃허브 로그인</span>
         </button>
         <button
+          type="button"
           onClick={handleClickHome}
           className="w-[460px] bg-grey2 border-none text-black mt-4 py-2 px-4 text-base rounded-lg cursor-pointer font-medium"
         >

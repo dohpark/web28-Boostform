@@ -1,8 +1,8 @@
-import { FormState, QuestionState, QuestionType } from "@/types/form";
-import { ForumCategory } from "@/types/forum";
+import { produce } from "immer";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { produce } from "immer";
+import { FormState, QuestionState, QuestionType } from "@/types/form";
+import { ForumCategory } from "@/types/forum";
 
 const INITIAL_FORM = {
   id: "example",
@@ -36,9 +36,9 @@ const useEditStore = create<EditState & EditAction>((set) => ({
   hover: "",
   drag: "",
   actions: {
-    setFocus: (focus) => set(() => ({ focus: focus })),
-    setHover: (hover) => set(() => ({ hover: hover })),
-    setDrag: (drag) => set(() => ({ drag: drag })),
+    setFocus: (focus) => set(() => ({ focus })),
+    setHover: (hover) => set(() => ({ hover })),
+    setDrag: (drag) => set(() => ({ drag })),
   },
 }));
 

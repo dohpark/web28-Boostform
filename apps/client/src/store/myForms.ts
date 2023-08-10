@@ -1,4 +1,4 @@
-import { create, createStore } from "zustand";
+import { create } from "zustand";
 
 type MyFormsState = {
   modalType: "delete" | "change";
@@ -16,8 +16,8 @@ const useMyForms = create<MyFormsState & MyFormsAction>((set) => ({
   modalType: "delete",
   selectedFormId: "",
   actions: {
-    setModalType: (modalType) => set(() => ({ modalType: modalType })),
-    setSelectedFormId: (selectedFormId) => set(() => ({ selectedFormId: selectedFormId })),
+    setModalType: (modalType) => set(() => ({ modalType })),
+    setSelectedFormId: (selectedFormId) => set(() => ({ selectedFormId })),
   },
 }));
 

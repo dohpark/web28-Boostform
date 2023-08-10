@@ -1,5 +1,7 @@
 "use client";
 
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,14 +10,24 @@ import Skeleton from "@/components/common/Skeleton";
 import FormLayout from "@/components/template/Layout";
 import useLoadingDelay from "@/hooks/useLoadingDelay";
 import { FormDataApi } from "@/types/form";
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useResponseHistory } from "@/store/responseHistory";
+
+type ParamsProps = {
+  id: string;
+};
 
 function Result() {
-  const { id } = useParams();
-  // const { state } = useLocation() as {
-  //   state: { responseId: string; type: "submitResponse" | "duplicateResponse" | "endResponse" };
-  // };
+  const { id } = useParams() as ParamsProps;
+  const { responseId, type, actions } = useResponseHistory();
+
+  const [localResponseId] = useState(responseId);
+  const [localType] = useState(type);
+
+  useEffect(() => {
+    actions.reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const router = useRouter();
 
   const fetchForm = (): Promise<FormDataApi> => formApi.getForm(id as string);
@@ -37,9 +49,9 @@ function Result() {
   }, [isSuccess, data, id]);
 
   const onClickModifyPreviousResponse = () => {
-    router.push(`/forms/${id}/view`, {
-      // state: state.responseId
-    });
+    actions.setResponseId(localResponseId);
+    actions.setType("editResponse");
+    router.push(`/forms/${id}/view`);
   };
 
   const onClickNavigateOtherResponse = () => {
@@ -47,11 +59,10 @@ function Result() {
   };
 
   const getTitle = () => {
-    // if (state && state.type === "submitResponse") return "응답이 기록되었습니다.";
-    // if (state && state.type === "duplicateResponse") return "이미 응답했습니다.";
-    // if (state && state.type === "endResponse") return "더 이상 응답을 받지 않습니다.";
-    // router.push("/");
-    return "test";
+    if (localType === "submitResponse") return "응답이 기록되었습니다.";
+    if (localType === "duplicateResponse") return "이미 응답했습니다.";
+    if (localType === "endResponse") return "더 이상 응답을 받지 않습니다.";
+    return "noTitle";
   };
 
   const checkApiSuccess = () => {
@@ -85,7 +96,7 @@ function Result() {
                     <Link
                       className="pt-1 text-sm font-normal text-blue4 underline cursor-pointer"
                       href={`/forms/${id}/view`}
-                      // onClick={onClickModifyPreviousResponse}
+                      onClick={onClickModifyPreviousResponse}
                     >
                       응답 수정
                     </Link>
@@ -94,7 +105,7 @@ function Result() {
                     <Link
                       className="pt-1 text-sm font-normal text-blue4 underline cursor-pointer"
                       href={`/forms/${id}/view`}
-                      // onClick={onClickNavigateOtherResponse}
+                      onClick={onClickNavigateOtherResponse}
                     >
                       다른 응답 제출
                     </Link>
