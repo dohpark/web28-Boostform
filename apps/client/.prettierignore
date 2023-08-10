@@ -1,0 +1,11 @@
+# vscode
+/.vscode
+
+# next
+/.next
+
+# node_modules
+/node_modules
+
+# pnpm
+pnpm-lock.yaml
