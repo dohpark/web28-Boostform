@@ -21,8 +21,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   useEffect(() => {
-    if (isSuccess) setAuth({ userId: data.userID, userName: data.userName, state: isSuccess ? "login" : "logout" });
-    if (isError) setAuth({ userId: "", userName: "", state: "logout" });
+    if (isSuccess && data.userID)
+      setAuth({ userId: data.userID, userName: data.userName, state: isSuccess ? "login" : "logout" });
+    else setAuth({ userId: "", userName: "", state: "logout" });
   }, [data, isSuccess, isError]);
 
   const AuthContextValue = useMemo(() => ({ auth, setAuth }), [auth, setAuth]);
